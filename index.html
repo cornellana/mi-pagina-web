@@ -1633,39 +1633,64 @@
     const galLinkEl = document.getElementById('galLink');
     const galCountEl= document.getElementById('galCount');
     let activeGallery = null;
+    let galSrcs = [];   /* URLs of all loaded photos for the open gallery */
+
+    function appendThumb(src, idx) {
+      const thumb = document.createElement('div');
+      thumb.className = 'gal-thumb';
+      thumb.style.backgroundImage = `url('${src}')`;
+      thumb.setAttribute('role', 'button');
+      thumb.setAttribute('tabindex', '0');
+      thumb.setAttribute('aria-label', `Photo ${idx + 1}`);
+      thumb.addEventListener('click', () => openLightbox(idx));
+      thumb.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') openLightbox(idx);
+      });
+      galGrid.appendChild(thumb);
+    }
+
+    function probeLocalImages(key, n) {
+      const src = LOCAL_BASE + key + '/' + String(n).padStart(2, '0') + '.jpg';
+      const img = new Image();
+      img.onload = () => {
+        const idx = galSrcs.length;
+        galSrcs.push(src);
+        appendThumb(src, idx);
+        galCountEl.textContent = galSrcs.length + ' photographs';
+        probeLocalImages(key, n + 1);
+      };
+      img.onerror = () => {
+        if (galSrcs.length === 0) galCountEl.textContent = 'No photographs found';
+      };
+      img.src = src;
+    }
 
     function openGallery(key) {
       const meta = GALLERY_META[key];
       if (!meta) return;
       activeGallery = key;
+      galSrcs = [];
 
       galCatEl.textContent  = TRANSLATIONS[currentLang]['cat_' + meta.catKey] || meta.cat;
       galNameEl.textContent = meta.name;
       galDescEl.textContent = typeof meta.desc === 'object' ? (meta.desc[currentLang] || meta.desc.en) : meta.desc;
       galLinkEl.href        = meta.link;
       galLinkEl.textContent = TRANSLATIONS[currentLang].gal_learn;
-      galCountEl.textContent = meta.count + ' photographs';
+      galCountEl.textContent = '…';
 
       galGrid.innerHTML = '';
-      for (let i = 1; i <= meta.count; i++) {
-        const src   = imgPath(key, i);
-        const idx   = i - 1;
-        const thumb = document.createElement('div');
-        thumb.className = 'gal-thumb';
-        thumb.style.backgroundImage = `url('${src}')`;
-        thumb.setAttribute('role', 'button');
-        thumb.setAttribute('tabindex', '0');
-        thumb.setAttribute('aria-label', `Photo ${i}`);
-        thumb.addEventListener('click', () => openLightbox(key, meta.count, idx));
-        thumb.addEventListener('keydown', e => {
-          if (e.key === 'Enter' || e.key === ' ') openLightbox(key, meta.count, idx);
-        });
-        galGrid.appendChild(thumb);
-      }
-
       document.body.style.overflow = 'hidden';
       galModal.classList.add('open');
       document.getElementById('galClose').focus();
+
+      if (isLocal) {
+        probeLocalImages(key, 1);
+      } else {
+        const imgs = GALLERY_IMAGES[key] || [];
+        galSrcs = imgs.map(f => WP + f);
+        galSrcs.forEach((src, idx) => appendThumb(src, idx));
+        galCountEl.textContent = galSrcs.length + ' photographs';
+      }
     }
 
     function closeGallery() {
@@ -1683,12 +1708,10 @@
     const lightbox  = document.getElementById('lightbox');
     const lbImg     = document.getElementById('lbImg');
     const lbCounter = document.getElementById('lbCounter');
-    let lbKey   = null;
-    let lbCount = 0;
-    let lbIdx   = 0;
+    let lbIdx = 0;
 
-    function openLightbox(key, count, idx) {
-      lbKey = key; lbCount = count; lbIdx = idx;
+    function openLightbox(idx) {
+      lbIdx = idx;
       loadLbImage();
       lightbox.classList.add('open');
       document.getElementById('lbClose').focus();
@@ -1696,22 +1719,22 @@
 
     function loadLbImage() {
       lbImg.classList.add('loading');
-      const src = imgPath(lbKey, lbIdx + 1);
+      const src = galSrcs[lbIdx];
       const tmp = new Image();
       tmp.onload  = () => { lbImg.src = src; lbImg.classList.remove('loading'); };
       tmp.onerror = () => { lbImg.src = src; lbImg.classList.remove('loading'); };
       tmp.src = src;
-      lbCounter.textContent = `${lbIdx + 1} / ${lbCount}`;
+      lbCounter.textContent = `${lbIdx + 1} / ${galSrcs.length}`;
     }
 
     function closeLightbox() { lightbox.classList.remove('open'); }
 
     document.getElementById('lbClose').addEventListener('click', closeLightbox);
     document.getElementById('lbPrev').addEventListener('click', () => {
-      lbIdx = (lbIdx - 1 + lbCount) % lbCount; loadLbImage();
+      lbIdx = (lbIdx - 1 + galSrcs.length) % galSrcs.length; loadLbImage();
     });
     document.getElementById('lbNext').addEventListener('click', () => {
-      lbIdx = (lbIdx + 1) % lbCount; loadLbImage();
+      lbIdx = (lbIdx + 1) % galSrcs.length; loadLbImage();
     });
     lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
 
@@ -1730,8 +1753,8 @@
     document.addEventListener('keydown', e => {
       if (lightbox.classList.contains('open')) {
         if (e.key === 'Escape')        closeLightbox();
-        else if (e.key === 'ArrowLeft')  { lbIdx = (lbIdx - 1 + lbCount) % lbCount; loadLbImage(); }
-        else if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % lbCount;            loadLbImage(); }
+        else if (e.key === 'ArrowLeft')  { lbIdx = (lbIdx - 1 + galSrcs.length) % galSrcs.length; loadLbImage(); }
+        else if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % galSrcs.length;                  loadLbImage(); }
       } else if (galModal.classList.contains('open')) {
         if (e.key === 'Escape') closeGallery();
       }
@@ -1743,8 +1766,8 @@
     lightbox.addEventListener('touchend', e => {
       const dx = e.changedTouches[0].clientX - lbTouchX;
       if (Math.abs(dx) > 40) {
-        if (dx < 0) { lbIdx = (lbIdx + 1) % lbCount; }
-        else        { lbIdx = (lbIdx - 1 + lbCount) % lbCount; }
+        if (dx < 0) { lbIdx = (lbIdx + 1) % galSrcs.length; }
+        else        { lbIdx = (lbIdx - 1 + galSrcs.length) % galSrcs.length; }
         loadLbImage();
       }
     }, { passive: true });
