@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Francisco Cornellana — Photography</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    /* ─── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #090909;
+      --dark:   #0f0f0f;
+      --card:   #141414;
+      --border: #1e1e1e;
+      --text:   #e6e6e6;
+      --muted:  #666;
+      --gold:   #b8985a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ─── Navigation ─────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 200;
+      padding: 1.2rem 3rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.4s, border-color 0.4s;
+      border-bottom: 1px solid transparent;
+    }
+    nav.scrolled {
+      background: rgba(9,9,9,0.95);
+      backdrop-filter: blur(18px);
+      border-bottom-color: var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .nav-logo img {
+      height: 54px;
+      width: auto;
+      display: block;
+      filter: drop-shadow(0 1px 4px rgba(0,0,0,0.6));
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: rgba(230,230,230,0.75);
+      text-decoration: none;
+      font-size: 0.71rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+    .nav-links a:hover { color: #fff; }
+    nav.scrolled .nav-links a { text-shadow: none; color: var(--muted); }
+    nav.scrolled .nav-links a:hover { color: var(--text); }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 4px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 1px;
+      background: var(--text);
+      transition: 0.3s;
+    }
+
+    @media (max-width: 860px) {
+      nav { padding: 1rem 1.5rem; }
+      .hamburger { display: flex; }
+      .nav-links {
+        position: fixed;
+        inset: 0;
+        background: var(--black);
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 2.5rem;
+        display: none;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links a { font-size: 0.9rem; text-shadow: none; color: var(--muted); }
+    }
+
+    /* ─── Hero ───────────────────────────────────────────────────── */
+    #home {
+      height: 100svh;
+      min-height: 620px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 0 3rem 10rem;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    /* Dark gradient at top so nav links are always readable */
+    #home::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto;
+      height: 200px;
+      background: linear-gradient(to bottom, rgba(9,9,9,0.72) 0%, transparent 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-slide {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: opacity 1.6s ease;
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to top,
+        rgba(9,9,9,0.92) 0%,
+        rgba(9,9,9,0.35) 45%,
+        rgba(9,9,9,0.08) 100%
+      );
+      z-index: 1;
+    }
+
+    .hero-content { position: relative; z-index: 2; pointer-events: none; }
+
+    /* Location badge — bottom right, above the dots row */
+    .hero-location {
+      position: absolute;
+      right: 3rem;
+      bottom: 5.5rem;
+      z-index: 2;
+      text-align: right;
+      pointer-events: none;
+    }
+    @media (max-width: 860px) {
+      .hero-location { bottom: 5rem; right: 1.5rem; }
+    }
+    .hero-location-cat {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.3rem;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .hero-location-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 400;
+      color: var(--text);
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.6s ease 0.08s, transform 0.6s ease 0.08s;
+    }
+    .hero-location-hint {
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgba(184,152,90,0.7);
+      margin-top: 0.5rem;
+      opacity: 0;
+      transition: opacity 0.6s ease 0.16s;
+    }
+    .hero-location.visible .hero-location-cat,
+    .hero-location.visible .hero-location-name,
+    .hero-location.visible .hero-location-hint {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* Slide dots — always at the very bottom, below all text */
+    .hero-dots {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .hero-dot {
+      width: 24px;
+      height: 1px;
+      background: rgba(230,230,230,0.3);
+      cursor: pointer;
+      transition: background 0.3s, width 0.3s;
+    }
+    .hero-dot.active { background: var(--gold); width: 40px; }
+
+    .label {
+      font-size: 0.68rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3.8rem, 9vw, 8rem);
+      font-weight: 400;
+      line-height: 1.03;
+      letter-spacing: -0.025em;
+      margin-bottom: 1.6rem;
+    }
+    .hero-title em { font-style: italic; color: var(--gold); }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: rgba(230,230,230,0.75);
+      max-width: 480px;
+      line-height: 1.8;
+    }
+
+    /* ─── Sections ───────────────────────────────────────────────── */
+    .section { padding: 8rem 3rem; }
+    .section-head { margin-bottom: 4rem; }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+      font-weight: 400;
+      line-height: 1.2;
+      margin-top: 0.5rem;
+    }
+    .rule { width: 34px; height: 1px; background: var(--gold); margin-top: 1.6rem; }
+
+    /* ─── Portfolio ──────────────────────────────────────────────── */
+    #portfolio { background: var(--dark); }
+
+    .filter-bar {
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap;
+      margin-bottom: 2px;
+      border: 1px solid var(--border);
+      width: fit-content;
+    }
+    .filter-btn {
+      padding: 0.55rem 1.3rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-right: 1px solid var(--border);
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+    }
+    .filter-btn:last-child { border-right: none; }
+    .filter-btn.active, .filter-btn:hover { color: var(--text); background: var(--card); }
+    .filter-btn.active { color: var(--gold); }
+
+    .portfolio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .p-item {
+      position: relative;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: var(--card);
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      color: inherit;
+    }
+    .p-item.hidden { display: none; }
+
+    .p-item-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .p-item:hover .p-item-bg { transform: scale(1.07); }
+
+    .p-item-info {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.4rem;
+      transition: background 0.3s;
+    }
+    .p-item:hover .p-item-info { background: rgba(0,0,0,0.62); }
+
+    .p-item-cat {
+      font-size: 0.62rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transform: translateY(8px);
+      opacity: 0;
+      transition: all 0.28s;
+    }
+    .p-item-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.15rem;
+      transform: translateY(8px);
+      opacity: 0;
+      transition: all 0.28s 0.04s;
+    }
+    .p-item:hover .p-item-cat,
+    .p-item:hover .p-item-name { transform: translateY(0); opacity: 1; }
+
+    /* ─── Calendar ───────────────────────────────────────────────── */
+    #calendar { background: var(--black); }
+
+    .year-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+    }
+    .year-card {
+      position: relative;
+      overflow: hidden;
+      background: var(--card);
+      aspect-ratio: 16/9;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      text-decoration: none;
+      color: inherit;
+    }
+    .year-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transition: transform 0.6s ease;
+      filter: brightness(0.45);
+    }
+    .year-card:hover .year-bg { transform: scale(1.05); filter: brightness(0.6); }
+    .year-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 60%;
+      background: linear-gradient(to top, rgba(9,9,9,0.8), transparent);
+    }
+    .year-info { position: relative; z-index: 1; padding: 1.5rem 2rem; }
+    .year-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 400;
+      line-height: 1;
+    }
+    .year-sub {
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 0.4rem;
+    }
+
+    /* ─── Biography ──────────────────────────────────────────────── */
+    #biography {
+      background: var(--dark);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: center;
+    }
+    .bio-text p { color: var(--muted); margin-bottom: 1.4rem; line-height: 1.9; }
+    .bio-text p:first-of-type { color: var(--text); font-size: 1.05rem; }
+    .bio-photo {
+      aspect-ratio: 3/4;
+      background-size: cover;
+      background-position: center top;
+      border: 1px solid var(--border);
+    }
+
+    /* ─── Gear ───────────────────────────────────────────────────── */
+    #gear {
+      background: var(--black);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7rem;
+      align-items: start;
+    }
+    .gear-text p { color: var(--muted); line-height: 1.9; margin-bottom: 1.4rem; }
+    .gear-photo {
+      aspect-ratio: 3/4;
+      background-size: cover;
+      background-position: center top;
+      border: 1px solid var(--border);
+      position: sticky;
+      top: 7rem;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 0.5rem;
+      padding: 0.85rem 2.4rem;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      text-decoration: none;
+      font-size: 0.7rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: background 0.25s, color 0.25s;
+    }
+    .btn:hover { background: var(--gold); color: var(--black); }
+
+    /* ─── Licenses ───────────────────────────────────────────────── */
+    #licenses { background: var(--dark); }
+    .license-intro {
+      max-width: 640px;
+      color: var(--muted);
+      line-height: 1.9;
+      margin-bottom: 3.5rem;
+    }
+    .license-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 1px;
+      background: var(--border);
+    }
+    .lic-card { background: var(--card); padding: 2.5rem 2rem; }
+    .lic-card-title {
+      font-size: 0.63rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.9rem;
+    }
+    .lic-card-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.75; }
+
+    /* ─── Contact ────────────────────────────────────────────────── */
+    #contact { background: var(--black); }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6rem;
+      margin-bottom: 6rem;
+    }
+    .contact-links a {
+      display: block;
+      font-size: 1.05rem;
+      color: var(--text);
+      text-decoration: none;
+      margin-bottom: 0.8rem;
+      transition: color 0.2s;
+    }
+    .contact-links a:hover { color: var(--gold); }
+    .social-col h3 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+    }
+    .social-list { display: flex; flex-direction: column; gap: 1rem; }
+    .social-list a {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: color 0.2s;
+    }
+    .social-list a::before {
+      content: '';
+      display: block;
+      width: 20px;
+      height: 1px;
+      background: currentColor;
+      flex-shrink: 0;
+      transition: width 0.3s;
+    }
+    .social-list a:hover { color: var(--text); }
+    .social-list a:hover::before { width: 40px; }
+
+    footer {
+      padding-top: 3rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 0.95rem; }
+    .footer-copy { font-size: 0.7rem; color: var(--muted); }
+
+    /* ─── Reveal ─────────────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(26px);
+      transition: opacity 0.85s ease, transform 0.85s ease;
+    }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* ─── Gallery Modal ──────────────────────────────────────────── */
+    .gal-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 900;
+      background: rgba(9,9,9,0.98);
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+      overflow: hidden;
+    }
+    .gal-modal.open { opacity: 1; pointer-events: all; }
+
+    .gal-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 1.6rem 2.4rem;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      gap: 2rem;
+    }
+    .gal-header-left { display: flex; flex-direction: column; gap: 0.25rem; flex: 1; min-width: 0; }
+    .gal-header-cat {
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+    .gal-header-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      line-height: 1.15;
+    }
+    .gal-header-desc {
+      font-size: 0.95rem;
+      color: rgba(180,180,180,0.85);
+      line-height: 1.8;
+      max-width: 740px;
+      margin-top: 0.6rem;
+    }
+    .gal-header-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.63rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-decoration: none;
+      margin-top: 0.6rem;
+      transition: color 0.2s;
+    }
+    .gal-header-link::after { content: '→'; }
+    .gal-header-link:hover { color: var(--text); }
+
+    .gal-header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.6rem;
+      flex-shrink: 0;
+    }
+    .gal-close {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .gal-close:hover { color: var(--text); border-color: var(--text); }
+
+    .gal-count {
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+    }
+
+    .gal-grid {
+      flex: 1;
+      overflow-y: auto;
+      padding: 1.5rem 2rem;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 3px;
+      align-content: start;
+    }
+    .gal-grid::-webkit-scrollbar { width: 4px; }
+    .gal-grid::-webkit-scrollbar-track { background: transparent; }
+    .gal-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .gal-thumb {
+      aspect-ratio: 4/3;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      background-color: var(--card);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s;
+    }
+    .gal-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0);
+      transition: background 0.2s;
+    }
+    .gal-thumb:hover::after { background: rgba(184,152,90,0.18); }
+    .gal-thumb:hover { transform: scale(1.02); }
+
+    /* ─── Lightbox ───────────────────────────────────────────────── */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(0,0,0,0.98);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .lightbox.open { opacity: 1; pointer-events: all; }
+
+    .lb-img {
+      max-width: calc(100vw - 140px);
+      max-height: calc(100vh - 100px);
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.2s;
+    }
+    .lb-img.loading { opacity: 0.2; }
+
+    .lb-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .lb-nav:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+    .lb-prev { left: 1.5rem; }
+    .lb-next { right: 1.5rem; }
+
+    .lb-close {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.5rem;
+      background: none;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: rgba(255,255,255,0.5);
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .lb-close:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+    .lb-counter {
+      position: absolute;
+      bottom: 1.4rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ─── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .section { padding: 5rem 1.5rem; }
+      #home { padding: 0 1.5rem 8rem; }
+
+      #biography {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 5rem 1.5rem;
+      }
+      .bio-photo { aspect-ratio: 16/9; order: -1; }
+
+      #gear {
+        grid-template-columns: 1fr;
+        gap: 3rem;
+        padding: 5rem 1.5rem;
+      }
+      .gear-photo { aspect-ratio: 16/9; position: static; }
+
+      .year-row { grid-template-columns: 1fr; }
+      .year-card { aspect-ratio: 16/7; }
+
+      .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+      footer { flex-direction: column; gap: 1rem; text-align: center; }
+
+      .gal-header { padding: 1.2rem 1.2rem; }
+      .gal-header-desc { display: none; }
+      .gal-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); padding: 0.8rem; }
+
+      .lb-img { max-width: calc(100vw - 20px); max-height: calc(100vh - 120px); }
+      .lb-prev { left: 0.4rem; }
+      .lb-next { right: 0.4rem; }
+    }
+
+    @media (max-width: 520px) {
+      .portfolio-grid { grid-template-columns: 1fr 1fr; }
+      .filter-bar { width: 100%; }
+      .filter-btn { flex: 1; text-align: center; }
+      .gal-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Navigation ──────────────────────────────────────────────── -->
+  <nav id="nav">
+    <a href="#home" class="nav-logo">
+      <img src="logo.png" alt="Francisco Cornellana Photography">
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#portfolio"  onclick="closeNav()">Portfolio</a></li>
+      <li><a href="#calendar"   onclick="closeNav()">By Year</a></li>
+      <li><a href="#biography"  onclick="closeNav()">Biography</a></li>
+      <li><a href="#gear"       onclick="closeNav()">Gear</a></li>
+      <li><a href="#licenses"   onclick="closeNav()">Licenses</a></li>
+      <li><a href="#contact"    onclick="closeNav()">Contact</a></li>
+    </ul>
+    <button class="hamburger" aria-label="Menu" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ── Hero ────────────────────────────────────────────────────── -->
+  <section id="home" onclick="heroClick(event)">
+    <div class="hero-slide" id="slideA"></div>
+    <div class="hero-slide" id="slideB"></div>
+    <div class="hero-overlay"></div>
+
+    <div class="hero-dots" id="heroDots"></div>
+    <div class="hero-location" id="heroLocation">
+      <div class="hero-location-cat" id="heroLocCat"></div>
+      <div class="hero-location-name" id="heroLocName"></div>
+      <div class="hero-location-hint">Click to view gallery</div>
+    </div>
+
+    <div class="hero-content">
+      <p class="label">Travel &amp; Event Photography</p>
+      <h1 class="hero-title">The world<br>through the<br><em>lens</em></h1>
+      <p class="hero-sub">From Alaska to Kenya, Japan to Patagonia — capturing what the naked eye sometimes misses.</p>
+    </div>
+  </section>
+
+  <!-- ── Portfolio ───────────────────────────────────────────────── -->
+  <section id="portfolio" class="section">
+    <div class="section-head reveal">
+      <p class="label">Work</p>
+      <h2 class="section-title">Portfolio</h2>
+      <div class="rule"></div>
+    </div>
+
+    <div class="filter-bar reveal" id="filterBar">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="america">Americas</button>
+      <button class="filter-btn" data-filter="europa">Europe</button>
+      <button class="filter-btn" data-filter="mundo">World</button>
+      <button class="filter-btn" data-filter="naturaleza">Nature</button>
+      <button class="filter-btn" data-filter="eventos">Events</button>
+    </div>
+
+    <div class="portfolio-grid reveal" id="portfolioGrid">
+
+      <!-- ── North America ── -->
+      <a class="p-item" data-cat="america" data-gallery="alaska"
+         href="https://cornellana.online/?page_id=2937" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/DSC02859-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Alaska</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="hawaii"
+         href="https://cornellana.online/?page_id=2943" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/DSC09082-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Hawaii</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="yellowstone"
+         href="https://cornellana.online/?page_id=2945" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R38614-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Yellowstone</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="yosemite"
+         href="https://cornellana.online/?page_id=2939" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R36359-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Yosemite</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="grand-canyon"
+         href="https://cornellana.online/?page_id=3099" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R30449-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Grand Canyon</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="arches"
+         href="https://cornellana.online/?page_id=2941" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Wix-ON1-DSC05278-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Arches</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="bryce-canyon"
+         href="https://cornellana.online/?page_id=3104" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R39096-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Bryce Canyon</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="monumental-valley"
+         href="https://cornellana.online/?page_id=3091" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R38745-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Zion</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="monumental-valley"
+         href="https://cornellana.online/?page_id=3091" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R30222-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Monument Valley</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="lake-powell"
+         href="https://cornellana.online/?page_id=3084" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R39223-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Lake Powell</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="america" data-gallery="southwest-parks"
+         href="https://cornellana.online/?page_id=2969" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R38624-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">North America</p><h3 class="p-item-name">Southwest Parks</h3></div>
+      </a>
+
+      <!-- ── South America ── -->
+      <a class="p-item" data-cat="america" data-gallery="patagonia"
+         href="https://cornellana.online/?page_id=2961" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R33327-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">South America</p><h3 class="p-item-name">Patagonia</h3></div>
+      </a>
+
+      <!-- ── Europe ── -->
+      <a class="p-item" data-cat="europa" data-gallery="lofoten"
+         href="https://cornellana.online/?page_id=2947" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Best-Photo-ON1-_7R37167-1-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Europe</p><h3 class="p-item-name">Lofoten</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="europa" data-gallery="dolomitas"
+         href="https://cornellana.online/?page_id=2971" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Dolomites-ON1-_7R41118-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Europe</p><h3 class="p-item-name">Dolomites</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="europa" data-gallery="roma-napoles"
+         href="https://cornellana.online/?page_id=3086" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/A1_06229-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Europe</p><h3 class="p-item-name">Rome &amp; Naples</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="europa" data-gallery="sagrada-familia"
+         href="https://cornellana.online/?page_id=2949" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Wide-ON1-_7R37073-1-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Europe</p><h3 class="p-item-name">Sagrada Família</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="europa" data-gallery="andorra"
+         href="https://cornellana.online/?page_id=2975" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R40360-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Europe</p><h3 class="p-item-name">Andorra</h3></div>
+      </a>
+
+      <!-- ── World ── -->
+      <a class="p-item" data-cat="mundo" data-gallery="japon"
+         href="https://cornellana.online/?page_id=2965" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R37899-scaled.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Asia</p><h3 class="p-item-name">Japan</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="mundo" data-gallery="kenia"
+         href="https://cornellana.online/?page_id=2977" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/A1_07241-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Africa</p><h3 class="p-item-name">Kenya</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="mundo" data-gallery="marruecos"
+         href="https://cornellana.online/?page_id=2979" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/A1_05970-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Africa</p><h3 class="p-item-name">Morocco</h3></div>
+      </a>
+
+      <!-- ── Nature / Specialty ── -->
+      <a class="p-item" data-cat="naturaleza" data-gallery="macro"
+         href="https://cornellana.online/?page_id=2953" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Macro-ON1-Detalle-Flor-2-scaled.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Specialty</p><h3 class="p-item-name">Macro</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="naturaleza" data-gallery="drones"
+         href="https://cornellana.online/?page_id=2951" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Drone-ON1-DJI_0149-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Specialty</p><h3 class="p-item-name">Drones</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="naturaleza" data-gallery="aves"
+         href="https://cornellana.online/?page_id=2955" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/A1_07234-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Wildlife</p><h3 class="p-item-name">Birds</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="naturaleza" data-gallery="flores"
+         href="https://cornellana.online/?page_id=2959" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Flowers-ON1-_7R39944-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Nature</p><h3 class="p-item-name">Flowers</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="naturaleza" data-gallery="mamiferos"
+         href="https://cornellana.online/?page_id=2957" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Mammals-ON1-_7R30284-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Wildlife</p><h3 class="p-item-name">Mammals</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="naturaleza" data-gallery="wings-over-wayne"
+         href="https://cornellana.online/?page_id=2963" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/WOW-19-ON1-_7R33824-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Airshow</p><h3 class="p-item-name">Wings over Wayne</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="naturaleza" data-gallery="slow-motion"
+         href="https://cornellana.online/?page_id=2973" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R39766-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Specialty</p><h3 class="p-item-name">Slow Motion</h3></div>
+      </a>
+
+      <!-- ── Events ── -->
+      <a class="p-item" data-cat="eventos" data-gallery="danza"
+         href="https://cornellana.online/?page_id=3874" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Sony-a7rIV4155-SM-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Events</p><h3 class="p-item-name">Dance</h3></div>
+      </a>
+
+      <a class="p-item" data-cat="eventos" data-gallery="rodeo"
+         href="https://cornellana.online/?page_id=2967" target="_blank" rel="noopener">
+        <div class="p-item-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Rodeo-ON1-_7R31709-scaled-1.jpg');"></div>
+        <div class="p-item-info"><p class="p-item-cat">Events</p><h3 class="p-item-name">Rodeo</h3></div>
+      </a>
+
+    </div>
+  </section>
+
+  <!-- ── Calendar ─────────────────────────────────────────────────── -->
+  <section id="calendar" class="section">
+    <div class="section-head reveal">
+      <p class="label">Archive</p>
+      <h2 class="section-title">By Year</h2>
+      <div class="rule"></div>
+    </div>
+    <div class="year-row reveal">
+      <a class="year-card" href="https://cornellana.online/?page_id=3361" target="_blank" rel="noopener">
+        <div class="year-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Best-Photo-ON1-_7R37167-1-scaled-1.jpg');"></div>
+        <div class="year-info">
+          <div class="year-num">2022</div>
+          <div class="year-sub">View gallery</div>
+        </div>
+      </a>
+      <a class="year-card" href="https://cornellana.online/?page_id=3363" target="_blank" rel="noopener">
+        <div class="year-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/7R33327-scaled-1.jpg');"></div>
+        <div class="year-info">
+          <div class="year-num">2023</div>
+          <div class="year-sub">View gallery</div>
+        </div>
+      </a>
+      <a class="year-card" href="https://cornellana.online/?page_id=3365" target="_blank" rel="noopener">
+        <div class="year-bg" style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/A1_07241-scaled-1.jpg');"></div>
+        <div class="year-info">
+          <div class="year-num">2024</div>
+          <div class="year-sub">View gallery</div>
+        </div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ── Biography ────────────────────────────────────────────────── -->
+  <section id="biography" class="section">
+    <div class="bio-text reveal">
+      <p class="label">About</p>
+      <h2 class="section-title">Biography</h2>
+      <div class="rule"></div>
+      <br>
+      <p>Francisco Cornellana is a travel and wildlife photographer based in the UK, with over a decade of work spanning six continents and some of the world's most extraordinary landscapes.</p>
+      <p>His images have taken him from the glaciated fjords of Alaska and the volcanic shores of Hawaii to the Arctic archipelago of Lofoten, the savannahs of Kenya and the granite towers of Patagonia. Whether tracking predators on the Masai Mara, shooting long exposures on a Norwegian coastline at 2 a.m., or documenting the culture and architecture of Morocco's ancient medinas, Francisco brings the same methodical eye and technical precision to every subject.</p>
+      <p>His specialty disciplines — aerial photography with DJI systems, macro photography, and long-exposure slow-motion work — complement a broader body of travel and landscape work that spans every major photographic environment: desert, arctic, jungle, ocean, mountain and urban.</p>
+      <p>Francisco works with the Sony Alpha system, including the 61-megapixel Sony A7R IV and the Sony A1, paired with a full suite of Sony G Master lenses. His work has been exhibited privately and is available for editorial, commercial and personal licensing.</p>
+    </div>
+    <div class="bio-photo reveal"
+         style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/Foto%20Francisco-863x1024.jpg');">
+    </div>
+  </section>
+
+  <!-- ── Gear ─────────────────────────────────────────────────────── -->
+  <section id="gear" class="section">
+    <div class="gear-text">
+      <div class="section-head reveal">
+        <p class="label">Tools</p>
+        <h2 class="section-title">My Gear</h2>
+        <div class="rule"></div>
+      </div>
+      <div class="reveal">
+        <p>Gear matters, though it is not everything. The right tool removes friction between the vision and the image — it does not create the vision. After years of testing systems across demanding conditions, I have settled on a kit that handles everything from telephoto wildlife bursts at 30 frames per second to low-light long exposures on a tripod at minus twenty degrees.</p>
+        <p><strong style="color:var(--text);font-weight:500;">Camera bodies:</strong> Sony Alpha A1 — 50 MP, 30fps, world-class autofocus for birds and fast action. Sony Alpha A7R IV — 61 MP for landscape and architecture work where resolution is paramount.</p>
+        <p><strong style="color:var(--text);font-weight:500;">Lenses:</strong> Sony 100–400mm f/4.5–5.6 GM (wildlife and airshows). Sony 16–35mm f/2.8 GM (landscape and architecture). Sony 24–105mm f/4 G (travel and reportage). Sony 90mm f/2.8 Macro G (macro work). Sony 200–600mm f/5.6–6.3 G (long-distance wildlife).</p>
+        <p><strong style="color:var(--text);font-weight:500;">Aerial:</strong> DJI Mavic 3 Pro — used for the drone gallery and aerial work across multiple locations.</p>
+        <p><strong style="color:var(--text);font-weight:500;">Support:</strong> Gitzo carbon fibre tripod with Arca-Swiss ballhead for long exposures. Peak Design travel system for field work.</p>
+        <a href="https://cornellana.online" target="_blank" rel="noopener" class="btn">View full portfolio</a>
+      </div>
+    </div>
+    <div class="gear-photo reveal"
+         style="background-image:url('https://cornellana.online/wp-content/uploads/2024/03/IMG_8879-768x1024.jpg');">
+    </div>
+  </section>
+
+  <!-- ── Licenses ──────────────────────────────────────────────────── -->
+  <section id="licenses" class="section">
+    <div class="section-head reveal">
+      <p class="label">Rights</p>
+      <h2 class="section-title">Licenses</h2>
+      <div class="rule"></div>
+    </div>
+    <p class="license-intro reveal">
+      All images on this site are the property of Francisco Cornellana and are protected by copyright. Reproduction, distribution or commercial use without the express written consent of the author is strictly prohibited.
+    </p>
+    <div class="license-cards reveal">
+      <div class="lic-card">
+        <p class="lic-card-title">Personal Use</p>
+        <p class="lic-card-desc">Permitted for educational or non-commercial personal use, always with correct attribution to the author.</p>
+      </div>
+      <div class="lic-card">
+        <p class="lic-card-title">Editorial Use</p>
+        <p class="lic-card-desc">Requires prior agreement. Please get in touch to request a specific editorial license.</p>
+      </div>
+      <div class="lic-card">
+        <p class="lic-card-title">Commercial Use</p>
+        <p class="lic-card-desc">Available upon request. Terms and scope are defined on a case-by-case basis.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Contact ───────────────────────────────────────────────────── -->
+  <section id="contact" class="section">
+    <div class="contact-grid">
+      <div class="reveal">
+        <p class="label">Get in touch</p>
+        <h2 class="section-title">Contact</h2>
+        <div class="rule" style="margin-bottom:2.5rem;"></div>
+        <div class="contact-links">
+          <a href="tel:+446417540072">+44 641 754 0072</a>
+          <a href="mailto:cornellana@mac.com">cornellana@mac.com</a>
+        </div>
+      </div>
+      <div class="social-col reveal">
+        <h3>Social Media</h3>
+        <div class="social-list">
+          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
+          <a href="https://twitter.com"   target="_blank" rel="noopener">Twitter / X</a>
+          <a href="https://flickr.com"    target="_blank" rel="noopener">Flickr</a>
+          <a href="https://500px.com"     target="_blank" rel="noopener">500px</a>
+        </div>
+      </div>
+    </div>
+    <footer>
+      <span class="footer-logo">Francisco Cornellana</span>
+      <p class="footer-copy">© 2026 Francisco Cornellana. All rights reserved.</p>
+    </footer>
+  </section>
+
+  <!-- ── Gallery Modal ─────────────────────────────────────────────── -->
+  <div id="galModal" class="gal-modal" role="dialog" aria-modal="true" aria-label="Gallery">
+    <div class="gal-header">
+      <div class="gal-header-left">
+        <span class="gal-header-cat" id="galCat"></span>
+        <span class="gal-header-name" id="galName"></span>
+        <p class="gal-header-desc" id="galDesc"></p>
+        <a class="gal-header-link" id="galLink" href="#" target="_blank" rel="noopener">Learn more</a>
+      </div>
+      <div class="gal-header-right">
+        <button class="gal-close" id="galClose" aria-label="Close gallery">✕</button>
+        <span class="gal-count" id="galCount"></span>
+      </div>
+    </div>
+    <div class="gal-grid" id="galGrid"></div>
+  </div>
+
+  <!-- ── Lightbox ──────────────────────────────────────────────────── -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lb-close" id="lbClose" aria-label="Close viewer">✕</button>
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="Previous">&#8592;</button>
+    <img class="lb-img" id="lbImg" src="" alt="Photography">
+    <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8594;</button>
+    <span class="lb-counter" id="lbCounter"></span>
+  </div>
+
+  <script>
+    const HERO_BASE = 'https://cornellana.online/wp-content/uploads/2024/03/';
+
+    /* ── Hero slideshow ─────────────────────────────────────────── */
+    const SLIDES = [
+      { img: '7R33327-scaled-1.jpg',                   name: 'Patagonia',    cat: 'South America',  gallery: 'patagonia'     },
+      { img: 'Best-Photo-ON1-_7R37167-1-scaled-1.jpg', name: 'Lofoten',      cat: 'Europe',         gallery: 'lofoten'       },
+      { img: 'DSC02859-scaled-1.jpg',                  name: 'Alaska',       cat: 'North America',  gallery: 'alaska'        },
+      { img: 'A1_07241-scaled-1.jpg',                  name: 'Kenya',        cat: 'Africa',         gallery: 'kenia'         },
+      { img: '7R37899-scaled.jpg',                     name: 'Japan',        cat: 'Asia',           gallery: 'japon'         },
+      { img: '7R38614-scaled-1.jpg',                   name: 'Yellowstone',  cat: 'North America',  gallery: 'yellowstone'   },
+      { img: '7R30449-scaled-1.jpg',                   name: 'Grand Canyon', cat: 'North America',  gallery: 'grand-canyon'  },
+      { img: 'DSC09082-scaled-1.jpg',                  name: 'Hawaii',       cat: 'North America',  gallery: 'hawaii'        },
+      { img: 'Dolomites-ON1-_7R41118-scaled-1.jpg',    name: 'Dolomites',    cat: 'Europe',         gallery: 'dolomitas'     },
+      { img: '7R36359-scaled-1.jpg',                   name: 'Yosemite',     cat: 'North America',  gallery: 'yosemite'      },
+    ];
+
+    const slideA  = document.getElementById('slideA');
+    const slideB  = document.getElementById('slideB');
+    const locEl   = document.getElementById('heroLocation');
+    const locCat  = document.getElementById('heroLocCat');
+    const locName = document.getElementById('heroLocName');
+    const dotsEl  = document.getElementById('heroDots');
+
+    let current = 0;
+    let front   = slideA;
+    let back    = slideB;
+
+    SLIDES.forEach((_, i) => {
+      const d = document.createElement('button');
+      d.className = 'hero-dot' + (i === 0 ? ' active' : '');
+      d.setAttribute('aria-label', SLIDES[i].name);
+      d.addEventListener('click', e => { e.stopPropagation(); goTo(i); });
+      dotsEl.appendChild(d);
+    });
+
+    function getDots() { return dotsEl.querySelectorAll('.hero-dot'); }
+
+    function showLocation(slide) {
+      locEl.classList.remove('visible');
+      setTimeout(() => {
+        locCat.textContent  = slide.cat;
+        locName.textContent = slide.name;
+        locEl.classList.add('visible');
+      }, 200);
+    }
+
+    function goTo(idx) {
+      if (idx === current) return;
+      current = idx;
+      back.style.backgroundImage = `url('${HERO_BASE}${SLIDES[idx].img}')`;
+      back.style.opacity  = '1';
+      front.style.opacity = '0';
+      getDots().forEach((d, i) => d.classList.toggle('active', i === idx));
+      showLocation(SLIDES[idx]);
+      [front, back] = [back, front];
+    }
+
+    front.style.backgroundImage = `url('${HERO_BASE}${SLIDES[0].img}')`;
+    front.style.opacity = '1';
+    back.style.opacity  = '0';
+    showLocation(SLIDES[0]);
+
+    let timer = setInterval(() => goTo((current + 1) % SLIDES.length), 5000);
+
+    let heroWasTouch = false;
+    function heroClick(e) {
+      if (heroWasTouch) return;   // already handled by touchend
+      if (e.target.closest('.hero-dot') || e.target.closest('nav')) return;
+      const gallery = SLIDES[current].gallery;
+      if (gallery) openGallery(gallery);
+    }
+
+    /* ── Navbar ─────────────────────────────────────────────────── */
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+    function closeNav()  { document.getElementById('navLinks').classList.remove('open'); }
+
+    /* ── Portfolio filter ──────────────────────────────────────── */
+    document.getElementById('filterBar').addEventListener('click', e => {
+      const btn = e.target.closest('.filter-btn');
+      if (!btn) return;
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      document.querySelectorAll('.p-item').forEach(item => {
+        item.classList.toggle('hidden', filter !== 'all' && item.dataset.cat !== filter);
+      });
+    });
+
+    /* ── Scroll reveal ─────────────────────────────────────────── */
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.07, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+    /* ── Gallery data ──────────────────────────────────────────── */
+    const LOCAL_BASE = '../../Pictures/Portfolio/';
+    const WP = 'https://cornellana.online/wp-content/uploads/2024/03/';
+    const isLocal = location.protocol === 'file:';
+
+    /* Remote image URLs — used on GitHub Pages / iPhone / any non-file:// context */
+    const GALLERY_IMAGES = {
+      'alaska':      ['DSC01967-scaled.jpg','DSC02612-scaled.jpg','DSC03248-scaled.jpg','DSC03011-scaled.jpg','DSC03224-scaled.jpg','DSC02830-scaled.jpg','DSC02435-scaled.jpg','DSC01058-scaled.jpg','DSC01788-scaled.jpg','DSC02919-scaled.jpg','DSC01240-scaled.jpg','DSC02184-scaled.jpg','DSC01943-scaled.jpg','DSC02922-scaled.jpg','DSC01455-scaled.jpg','DSC02195-scaled.jpg','DSC02858-scaled.jpg','DSC02890-scaled.jpg','DSC02831-scaled.jpg','DSC02192-scaled.jpg'],
+      'hawaii':      ['DSC09532-scaled.jpg','DSC09574-scaled.jpg','DSC09655-scaled.jpg','DSC09184-scaled.jpg','DSC09105-scaled.jpg','DSC09323-scaled.jpg','DSC09143-scaled.jpg','DSC08962-scaled.jpg','DSC09255-scaled.jpg','DSC09628-scaled.jpg','DSC09053-scaled.jpg','DSC09755-scaled.jpg','DSC09663-scaled.jpg','DSC09109-scaled.jpg','DSC09631-scaled.jpg','DSC09705-scaled.jpg','DSC09490-scaled.jpg','DSC09205-scaled.jpg','DSC09523-scaled.jpg','DSC09581-scaled.jpg'],
+      'yellowstone': ['_7R39519-scaled.jpg','_7R38820-scaled.jpg','_7R39653-scaled.jpg','_7R39135-scaled.jpg','_7R38969-scaled.jpg','_7R38955-scaled.jpg','_7R38766-scaled.jpg','_7R38809-scaled.jpg','DSC05936-scaled.jpg','_7R38612-scaled.jpg','_7R39693-scaled.jpg','_7R38567-scaled.jpg','_7R39679-scaled.jpg','_7R39889-scaled.jpg','_7R38605-scaled.jpg','_7R38611-scaled.jpg','_7R39080-scaled.jpg','_7R39094-scaled.jpg','_7R38601-scaled.jpg','_7R39537-scaled.jpg'],
+      'yosemite':    ['_7R36602-scaled.jpg','DSC05116-scaled.jpg','_7R36212-scaled.jpg','_7R36359-scaled.jpg','_7R36198-scaled.jpg','_7R36761-scaled.jpg','_7R36211-scaled.jpg','_7R36238-scaled.jpg','_7R36358-scaled.jpg','_7R36176-scaled.jpg','DSC05058-scaled.jpg','DSC05110-scaled.jpg','_7R36611-scaled.jpg','DSC05107-scaled.jpg','_7R36565-scaled.jpg','_7R36571-scaled.jpg','_7R36217-scaled.jpg','_7R36404-scaled.jpg','_7R36661-scaled.jpg','_7R36649-scaled.jpg'],
+      'grand-canyon':['_7R30424-scaled.jpg','_7R30403-scaled.jpg','_7R30518-scaled.jpg','_7R30635-scaled.jpg','_7R30494-scaled.jpg','_7R30612-scaled.jpg','_7R30430-scaled.jpg','_7R30458-scaled.jpg','_7R30653-scaled.jpg','_7R30386-scaled.jpg','_7R30642-scaled.jpg','_7R30606-scaled.jpg','_7R30395-scaled.jpg','_7R30510-scaled.jpg','_7R30451-scaled.jpg','_7R30423-scaled.jpg','_7R30483-scaled.jpg','_7R30389-scaled.jpg','_7R30394-scaled.jpg','_7R30517-scaled.jpg'],
+      'arches':      ['Wix%20ON1%20_7R37925-scaled.jpg','Wix%20ON1%20DSC05283-scaled.jpg','Wix%20ON1%20_7R38236-scaled.jpg','Wix%20ON1%20_7R38340-scaled.jpg','Wix%20ON1%20_7R38142-scaled.jpg','Wix%20ON1%20_7R38194-scaled.jpg','Wix%20ON1%20_7R38180-scaled.jpg','Wix%20ON1%20_7R38143-scaled.jpg','Wix%20ON1%20_7R37923-scaled.jpg','Wix%20ON1%20_7R38192-scaled.jpg','Wix%20ON1%20_7R38129%201-scaled.jpg','Wix%20ON1%20DSC05278-scaled.jpg','Wix%20ON1%20_7R38122-scaled.jpg','Wix%20ON1%20_7R38321-scaled.jpg','Wix%20ON1%20DSC05222-scaled.jpg','Wix%20ON1%20_7R37984-scaled.jpg','Wix%20ON1%20_7R38082-scaled.jpg','Wix%20ON1%20DSC05354-scaled.jpg','Wix%20ON1%20_7R38337-scaled.jpg','Wix%20ON1%20_7R37945-scaled.jpg'],
+      'bryce-canyon':['_7R38900-scaled.jpg','_7R39047-scaled.jpg','_7R38965-scaled.jpg','_7R38930-scaled.jpg','_7R39041-scaled.jpg','_7R38899-scaled.jpg','_7R39022-scaled.jpg','_7R38914-scaled.jpg','_7R39053-scaled.jpg','_7R38958-scaled.jpg','_7R39150-scaled.jpg','_7R38912-scaled.jpg','_7R39086-scaled.jpg','_7R38928-scaled.jpg','_7R39057-scaled.jpg','_7R39059-scaled.jpg','_7R38925-scaled.jpg','_7R39167-scaled.jpg','_7R38993-scaled.jpg','_7R38915-scaled.jpg'],
+      'monumental-valley':['_7R30071-scaled.jpg','_7R30104-scaled.jpg','_7R30339-scaled.jpg','_7R30077-scaled.jpg','_7R30103-scaled.jpg','_7R30300-scaled.jpg','_7R30089-scaled.jpg','_7R30303-scaled.jpg','_7R30006-scaled.jpg','_7R30204-scaled.jpg','_7R30210-scaled.jpg','_7R30364-scaled.jpg','_7R30198-scaled.jpg','_7R30173-scaled.jpg','_7R30213-scaled.jpg','_7R30207-scaled.jpg','_7R30171-scaled.jpg','_7R30170-scaled.jpg','_7R30216-scaled.jpg','_7R30174-scaled.jpg'],
+      'lake-powell': ['_7R39922-scaled.jpg','_7R39981-scaled.jpg','_7R39426-scaled.jpg','_7R39925-scaled.jpg','_7R39199-scaled.jpg','_7R39227-scaled.jpg','_7R39250-scaled.jpg','_7R39846-scaled.jpg','_7R39809-scaled.jpg','_7R39829-scaled.jpg','_7R39524-scaled.jpg','_7R39934-scaled.jpg','_7R39224-scaled.jpg','_7R39977-scaled.jpg','_7R39892-scaled.jpg','_7R39953-scaled.jpg','_7R39421-scaled.jpg','_7R39898-scaled.jpg','_7R39258-scaled.jpg','_7R39564-scaled.jpg'],
+      'southwest-parks':['_7R38363-scaled.jpg','_7R38565-scaled.jpg','_7R38606-scaled.jpg','_7R38389-scaled.jpg','_7R38410-scaled.jpg','_7R38348-scaled.jpg','_7R38406-scaled.jpg','_7R38638-scaled.jpg','_7R38598-scaled.jpg','_7R38573-scaled.jpg','_7R38605-scaled.jpg','_7R38407-scaled.jpg','_7R38615-scaled.jpg','_7R38563-scaled.jpg','_7R38576-scaled.jpg','_7R38358-scaled.jpg','_7R38574-scaled.jpg','_7R38560-scaled.jpg','_7R38617-scaled.jpg','_7R38603-scaled.jpg'],
+      'patagonia':   ['_7R33342-scaled.jpg','_7R30844-scaled.jpg','_7R33395-scaled.jpg','_7R30851-scaled.jpg','_7R33431-scaled.jpg','_7R33425-scaled.jpg','DSC08235-scaled.jpg','_7R33369-scaled.jpg','DSC08169-scaled.jpg','_7R30884-scaled.jpg','_7R33396-scaled.jpg','_7R31595-scaled.jpg','_7R33397-scaled.jpg','_7R33340-scaled.jpg','DSC08140-scaled.jpg','_7R30675-scaled.jpg','_7R33208-scaled.jpg','_7R33224-scaled.jpg','_7R31619-scaled.jpg','_7R33191-scaled.jpg'],
+      'lofoten':     ['Lofoten%20ON1%20_7R36741-scaled.jpg','Lofoten%20ON1%20_7R36967-scaled.jpg','Lofoten%20ON1%20_7R36753-scaled.jpg','Lofoten%20ON1%20_7R37672-scaled.jpg','Lofoten%20ON1%20_7R36750-scaled.jpg','Lofoten%20ON1%20_7R38323-scaled.jpg','Lofoten%20ON1%20_7R36905-scaled.jpg','_7R37813-scaled.jpg','Lofoten%20ON1%20_7R37207-scaled.jpg','reflection%20601-scaled.jpg','Lofoten%20ON1%20_7R38137-scaled.jpg','Lofoten%20ON1%20_7R38319-scaled.jpg','Lofoten%20ON1%20_7R37836-scaled.jpg','Lofoten%20ON1%20_7R38291-scaled.jpg','Lofoten%20ON1%20_7R37809-scaled.jpg','Lofoten%20ON1%20_7R38333-scaled.jpg','Lofoten%20ON1%20_7R36677-scaled.jpg','Lofoten%20ON1%20DSC06053-scaled.jpg','Best%20Photo%20ON1%20_7R37167%201-scaled.jpg','Lofoten%20ON1%20_7R37816-scaled.jpg'],
+      'dolomitas':   ['Dolomites%20ON1%20_7R40765-scaled.jpg','Dolomites%20ON1%20_7R40575-scaled.jpg','Dolomites%20ON1%20_7R41150-scaled.jpg','Dolomites%20ON1%20_7R40859-scaled.jpg','_7R41076-scaled.jpg','Dolomites%20ON1%20_7R41110-scaled.jpg','Dolomites%20ON1%20_7R40835-scaled.jpg','Dolomites%20ON1%20_7R40823-scaled.jpg','Dolomites%20ON1%20_7R41143-scaled.jpg','Dolomites%20ON1%20_7R40846-scaled.jpg','Dolomites%20ON1%20_7R40873-scaled.jpg','Dolomites%20ON1%20_7R40557-scaled.jpg','Dolomites%20ON1%20_7R40798-scaled.jpg','Dolomites%20ON1%20_7R40869-scaled.jpg','Dolomites%20ON1%20_7R40916-scaled.jpg','Dolomites%20ON1%20_7R40544-scaled.jpg','Dolomites%20ON1%20_7R40608-scaled.jpg','Dolomites%20ON1%20_7R40561-scaled.jpg','Dolomites%20ON1%20_7R41144-scaled.jpg','Dolomites%20ON1%20_7R40939-scaled.jpg'],
+      'roma-napoles':['A1_06239-scaled.jpg','A1_06210-scaled.jpg','A1_06364-scaled.jpg','A1_06358-scaled.jpg','A1_06366-scaled.jpg','A1_06367-scaled.jpg','A1_06217-scaled.jpg','A1_06362-scaled.jpg','A1_06348-scaled.jpg','A1_06214-scaled.jpg','A1_06229-scaled.jpg','A1_06299-scaled.jpg','A1_06273-scaled.jpg','A1_06298-scaled.jpg','A1_06339-scaled.jpg','A1_06311-scaled.jpg','A1_06258-scaled.jpg','A1_06304-scaled.jpg','A1_06338-scaled.jpg','A1_06249-scaled.jpg'],
+      'sagrada-familia':['Up%20ON1%20_7R37065-scaled.jpg','Geometric%207158-scaled.jpg','_7R37092-scaled.jpg','Wide%20ON1%20_7R37073%201-scaled.jpg','symetry%20595-scaled.jpg','_7R37080-scaled.jpg','color%207070.jpg','multiples%20%20043-scaled.jpg','color%2021-scaled.jpg','color%20%20045-scaled.jpg','texture%20%20028-scaled.jpg','Geometric%207090.jpg','Wide%20ON1%20_7R37180-scaled.jpg','Leaves%20ON1%20_7R37128-scaled.jpg','door%20window%207116-scaled.jpg','Geometric%207147-scaled.jpg','best%20%20018-scaled.jpg','best%20%20025-scaled.jpg','best%20%20019-scaled.jpg','best%20%20020-scaled.jpg'],
+      'andorra':     ['_7R40106-scaled.jpg','_7R41117-scaled.jpg','_7R40362-scaled.jpg','_7R40082-scaled.jpg','_7R40048-scaled.jpg','_7R40092-scaled.jpg','_7R40113-scaled.jpg','_7R40226-scaled.jpg','_7R40201-scaled.jpg','_7R40055-scaled.jpg','_7R40075-scaled.jpg','_7R40133-scaled.jpg','_7R40073-scaled.jpg','_7R40187-scaled.jpg','_7R40360-scaled.jpg','_7R40120-scaled.jpg','_7R40065-scaled.jpg','_7R40052-scaled.jpg','_7R40067-scaled.jpg','A1_00488-scaled.jpg'],
+      'japon':       ['7R37188-scaled.jpg','7R37426-scaled.jpg','7R37559-scaled.jpg','7R37746-scaled.jpg','7R37847-scaled.jpg','7R37975-scaled.jpg','7R38092-scaled.jpg','7R38155-scaled.jpg','Osaka-ON1-_7R36970-scaled.jpg','7R37146-scaled.jpg','7R37286-scaled.jpg','7R37493-scaled.jpg','7R37647-scaled.jpg','7R37798-scaled.jpg','7R37915-scaled.jpg','7R38252-scaled.jpg','Osaka-ON1-_7R36946-scaled.jpg','7R37102-scaled.jpg','7R37263-scaled.jpg','7R37609-scaled.jpg'],
+      'kenia':       ['A1_06178-scaled.jpg','A1_07214-scaled.jpg','A1_09192-scaled.jpg','A1_05022-scaled.jpg','A1_07243-scaled.jpg','A1_08153-scaled.jpg','A1_06192-scaled.jpg','A1_08668-scaled.jpg','A1_07786-scaled.jpg','A1_07241-scaled.jpg','A1_06789-scaled.jpg','A1_08743-scaled.jpg','A1_08468-scaled.jpg','A1_07399-scaled.jpg','A1_06648-scaled.jpg','_7R42437-scaled.jpg','A1_06946-scaled.jpg','A1_08425-scaled.jpg','A1_07764-scaled.jpg','A1_06504-scaled.jpg'],
+      'marruecos':   ['A1_05334-scaled.jpg','A1_05452-scaled.jpg','A1_04770-scaled.jpg','A1_05693-scaled.jpg','A1_05863-scaled.jpg','A1_05122-scaled.jpg','A1_05042-scaled.jpg','A1_04837-scaled.jpg','A1_05731-scaled.jpg','A1_05889-scaled.jpg','A1_05645-scaled.jpg','A1_05686-scaled.jpg','A1_05309-scaled.jpg','A1_05492-scaled.jpg','A1_06158-scaled.jpg','A1_05323-scaled.jpg','A1_04809-scaled.jpg','A1_05295-scaled.jpg','A1_04835-scaled.jpg','A1_05915-scaled.jpg'],
+      'macro':       ['Macro-ON1-Insect-31-scaled.jpg','green-ON1-Macro-ON1-Insect-7-2-scaled.jpg','eye-590-scaled.jpg','macro-558-scaled.jpg','Beauty-ON1-_7R36138-scaled.jpg','eyes-579.jpg','Spider_Grande_ON1_Arana_Grande-scaled.jpg','Macro-ON1-Detalle-Flor-scaled.jpg','Hibiscus-ON1-1-scaled.jpg','Spider_ON1_Arana-scaled.jpg','Macro-ON1-Insect-14-scaled.jpg','macro-550.jpg','Spider-ON1-Spider-Eyes-scaled.jpg','Macro-ON1-Insect-12-scaled.jpg','mushrooms-563-scaled.jpg','Macro-ON1-Detalle-Flor-2-scaled-1.jpg','Drop-ON1-_7R34197-scaled.jpg','macro-549-scaled.jpg','Flower-ON1-flower-107-copy-scaled.jpg','Purple-466-scaled.jpg'],
+      'drones':      ['Drone%20ON1%20DJI_0051-scaled.jpg','Drone%20ON1%20DJI_0181-scaled.jpg','Drone%20ON1%20DJI_0098-scaled.jpg','Drone%20ON1%20DJI_0124-scaled.jpg','Drone%20ON1%20DJI_0156-scaled.jpg','Drone%20ON1%20DJI_0088-scaled.jpg','Drone%20ON1%20DJI_0126-scaled.jpg','Drone%20ON1%20DJI_0142-scaled.jpg','Drone%20ON1%20DJI_0114-scaled.jpg','Drone%20ON1%20DJI_0133-scaled.jpg','Autumn%20ON1%20DJI_0255-scaled.jpg','Drone%20ON1%20DJI_0095-scaled.jpg','Drone%20ON1%20DJI_0170-scaled.jpg','Drone%20ON1%20DJI_0042-scaled.jpg','Drone%20ON1%20DJI_0212-scaled.jpg','Drone%20ON1%20DJI_0108-scaled.jpg','DJI_0018-scaled.jpg','Drone%20ON1%20DJI_0149-scaled.jpg','Drone%20ON1%20DJI_0147-scaled.jpg','Drone%20ON1%20DJI_0160-scaled.jpg'],
+      'aves':        ['_7R31173-scaled.jpg','_7R31312-scaled.jpg','Bird%20ON1%20_7R30667-scaled.jpg','Bird%20ON1%20_7R35432-scaled.jpg','_7R31376-scaled.jpg','_7R31452-scaled.jpg','Bird%20ON1%20_7R30502-scaled.jpg','_7R31193-scaled.jpg','_7R31348-scaled.jpg','_7R31424-scaled.jpg','_7R31417-scaled.jpg','_7R31448-scaled.jpg','Bird%20ON1%20_7R30115-scaled.jpg','Bird%20ON1%20_7R36119-2-scaled.jpg','_7R31438-scaled.jpg','_7R31275-scaled.jpg','_7R31485-scaled.jpg','_7R31292-scaled.jpg','_7R38000-scaled.jpg','_7R31406-scaled.jpg'],
+      'flores':      ['Flowers%20ON1%20_7R36891-scaled.jpg','Flowers%20ON1%20_7R32675-scaled.jpg','Flowers%20ON1%20DSC05973-scaled.jpg','Flowers%20ON1%20_7R37700-scaled.jpg','Flowers%20ON1%20DSC00750-scaled.jpg','Flowers%20ON1%20_7R30557-scaled.jpg','Flowers%20ON1%20_7R30548-scaled.jpg','Flowers%20ON1%20_7R37689-scaled.jpg','Flowers%20ON1%20DSC09307-scaled.jpg','_7R37793-scaled.jpg','Flowers%20ON1%20DSC04482-scaled.jpg','Flowers%20ON1%20_7R31930-scaled.jpg','Flowers%20ON1%20_7R36844-scaled.jpg','Flowers%20ON1%20_7R30454-scaled.jpg','_7R31175-scaled.jpg','Flowers%20ON1%20DSC05971-scaled.jpg','_7R31100-scaled.jpg','_7R31425-scaled.jpg','Flowers%20ON1%20DSC00769-scaled.jpg','_7R31026-scaled.jpg'],
+      'mamiferos':   ['Mammals%20%20ON1%20_7R39279-scaled.jpg','Mammals%20%20ON1%20DSC05306-scaled.jpg','Mammals%20%20ON1%20DSC03011-scaled.jpg','Mammals%20%20ON1%20_7R39278-scaled.jpg','Mammals%20%20ON1%20_7R35684-scaled.jpg','Mammals%20%20ON1%20IMG_3464-scaled.jpg','Mammals%20%20ON1%20DSC05880-scaled.jpg','Mammals%20%20ON1%20_7R35849-scaled.jpg','Mammals%20%20ON1%20DSC03072-scaled.jpg','Mammals%20%20ON1%20DSC03107-scaled.jpg','Mammals%20%20ON1%20DSC02580-scaled.jpg','Mammals%20%20ON1%20_7R31690-scaled.jpg','Mammals%20%20ON1%20_7R30567-scaled.jpg','Mammals%20%20ON1%20_7R35609-scaled.jpg','Mammals%20ON1%20_7R39192-scaled.jpg','Mammals%20%20ON1%20DSC02959-scaled.jpg','Mammals%20%20ON1%20DSC03114-scaled.jpg','Mammals%20%20ON1%20_7R30629-scaled.jpg','Mammals%20%20ON1%20DSC02948-scaled.jpg','Mammals%20%20ON1%20_7R38706-scaled.jpg'],
+      'wings-over-wayne':['WOW%2019%20ON1%20_7R34693-scaled.jpg','WOW%2019%20ON1%20_7R36251-scaled.jpg','WOW%2019%20%20ON1%20_7R33795-scaled.jpg','WOW%2019%20ON1%20_7R34862-scaled.jpg','WOW%2019%20%20ON1%20_7R33807-scaled.jpg','WOW%2019%20%20ON1%20_7R33740-scaled.jpg','WOW%2019%20ON1%20_7R34444-scaled.jpg','WOW%2019%20%20ON1%20_7R33755-scaled.jpg','WOW%2019%20ON1%20_7R34929-scaled.jpg','WOW%2019%20%20ON1%20_7R33816-scaled.jpg','WOW%2019%20ON1%20_7R35428-scaled.jpg','WOW%2019%20ON1%20_7R36055-scaled.jpg','WOW%2019%20%20ON1%20_7R33779-scaled.jpg','WOW%2019%20ON1%20_7R34454-scaled.jpg','WOW%2019%20ON1%20_7R35762-scaled.jpg','WOW%2019%20%20ON1%20_7R33988-scaled.jpg','WOW%2019%20ON1%20_7R35401-scaled.jpg','WOW%2019%20ON1%20_7R36644-scaled.jpg','WOW%2019%20ON1%20_7R34641-scaled.jpg','WOW%2019%20ON1%20_7R34480-scaled.jpg'],
+      'slow-motion': ['_7R36825-scaled.jpg','_7R30844-scaled.jpg','A1_02076-scaled.jpg','A1_01231-scaled.jpg','_7R36371-scaled.jpg','_7R36832-scaled.jpg','A1_02048-scaled.jpg','A1_01233-scaled.jpg','_7R30884-scaled.jpg','A1_02075-scaled.jpg','_7R36370-scaled.jpg','_7R30842-scaled.jpg','_7R30843-scaled.jpg','_7R38158-scaled.jpg','_7R36834-scaled.jpg','A1_02072-scaled.jpg','_7R37972-scaled.jpg','_7R36265-scaled.jpg','_7R37971-scaled.jpg','A1_01042-scaled.jpg'],
+      'danza':       ['Sony-a7rIV4119-SM-scaled.jpg','Sony-a7rIV4121-SM-scaled.jpg','Sony-a7rIV4122-SM-scaled.jpg','Sony-a7rIV4127-SM-scaled.jpg','Sony-a7rIV4128-SM-scaled.jpg','Sony-a7rIV4129-SM-scaled.jpg','Sony-a7rIV4130-SM-scaled.jpg','Sony-a7rIV4131-SM-scaled.jpg','Sony-a7rIV4132-SM-scaled.jpg','Sony-a7rIV4136-SM-scaled.jpg','Sony-a7rIV4137-SM-scaled.jpg','Sony-a7rIV4139-SM-scaled.jpg','Sony-a7rIV4140-SM-scaled.jpg','Sony-a7rIV4142-SM-scaled.jpg','Sony-a7rIV4144-SM-scaled.jpg','Sony-a7rIV4145-SM-scaled.jpg','Sony-a7rIV4146-SM-scaled.jpg','Sony-a7rIV4147-SM-scaled.jpg','Sony-a7rIV4148-SM-scaled.jpg','Sony-a7rIV4152-SM-scaled.jpg'],
+      'rodeo':       ['Rodeo%20ON1%20_7R32210-scaled.jpg','Rodeo%20ON1%20DSC08483-scaled.jpg','Rodeo%20ON1%20DSC08497-scaled.jpg','Rodeo%20ON1%20_7R31679-scaled.jpg','Rodeo%20ON1%20_7R32173-scaled.jpg','Rodeo%20ON1%20_7R32365-scaled.jpg','Rodeo%20ON1%20_7R32239-scaled.jpg','Rodeo%20ON1%20_7R32211-scaled.jpg','Rodeo%20ON1%20_7R32159-scaled.jpg','Rodeo%20ON1%20DSC08522-scaled.jpg','Rodeo%20ON1%20_7R32414-scaled.jpg','Rodeo%20ON1%20DSC08481-scaled.jpg','Rodeo%20ON1%20DSC08495-scaled.jpg','Rodeo%20ON1%20_7R32212-scaled.jpg','Rodeo%20ON1%20_7R32010-scaled.jpg','Rodeo%20ON1%20DSC08485-scaled.jpg','Rodeo%20ON1%20DSC08526-scaled.jpg','Rodeo%20ON1%20_7R32362-scaled.jpg','Rodeo%20ON1%20_7R32160-scaled.jpg','Rodeo%20ON1%20DSC08527-scaled.jpg'],
+    };
+
+    const GALLERY_META = {
+      'alaska': {
+        name: 'Alaska', cat: 'North America', count: 20,
+        desc: 'Alaska is the last great American wilderness — a place where glaciers the size of small countries calve into icy fjords, where grizzly bears fish for salmon in crystal rivers, and where the Aurora Borealis ignites the winter sky in swirling green and violet. Covering over 1.7 million km², it harbors seventeen of North America\'s twenty highest peaks. These images were taken across Southeast Alaska and the Kenai Peninsula, deep into a raw, primordial landscape that simultaneously humbles and electrifies.',
+        link: 'https://en.wikipedia.org/wiki/Alaska'
+      },
+      'hawaii': {
+        name: 'Hawaii', cat: 'North America', count: 20,
+        desc: 'Born from volcanic fury beneath the Pacific, the Hawaiian Islands rise in a mosaic of contrasting worlds — active lava fields on the Big Island, lush ancient rainforests on Kauai, dramatic sea cliffs on Molokai, and the turquoise reefs that surround every shore. The quality of light here is unlike anywhere else: warm, diffuse and golden at dawn, electric and vibrant at midday. A place where geology, ecology and Polynesian culture converge into endless photographic possibility.',
+        link: 'https://en.wikipedia.org/wiki/Hawaii'
+      },
+      'yellowstone': {
+        name: 'Yellowstone', cat: 'North America', count: 20,
+        desc: 'Yellowstone sits atop one of the world\'s largest volcanic hotspots, and the landscape makes no secret of it. Over 10,000 geothermal features — geysers, mud pots, prismatic springs and fumaroles — paint the plateau in impossible colors. Above ground, vast herds of bison roam valley floors, wolves and elk play out life-and-death dramas in the Lamar Valley, and Old Faithful erupts on its ancient schedule. This is North America at its most primal and spectacular.',
+        link: 'https://en.wikipedia.org/wiki/Yellowstone_National_Park'
+      },
+      'yosemite': {
+        name: 'Yosemite', cat: 'North America', count: 20,
+        desc: 'Few places on Earth match the scale and majesty of Yosemite Valley. Sheer granite walls — El Capitan rising 900 meters from the valley floor, Half Dome a monolith that stops every conversation — frame a world of ancient sequoias, tumbling waterfalls and glacial meadows. Ansel Adams spent decades here trying to capture what the eye sees in an instant. Every visit reveals something new: a different light, a new angle, a season\'s change that transforms familiar icons into something entirely fresh.',
+        link: 'https://en.wikipedia.org/wiki/Yosemite_National_Park'
+      },
+      'grand-canyon': {
+        name: 'Grand Canyon', cat: 'North America', count: 20,
+        desc: 'No photograph — however technically perfect — fully prepares you for the Grand Canyon. Standing at the South Rim, the scale simply refuses to register: 446 kilometers long, 29 kilometers wide, 1.6 kilometers deep, and two billion years of geological time laid bare in its layered red and ochre walls. The Colorado River, a silver thread far below, carved all of this. Dawn and dusk are the defining moments — when warm light saturates every stratum and the canyon glows as if lit from within.',
+        link: 'https://en.wikipedia.org/wiki/Grand_Canyon'
+      },
+      'arches': {
+        name: 'Arches', cat: 'North America', count: 20,
+        desc: 'Arches National Park contains the densest concentration of natural stone arches on the planet — over 2,000 of them, spanning from fragile windows barely large enough to crawl through to the soaring 88-meter span of Landscape Arch. The park sits on a vast underground salt bed that has been shifting, buckling and eroding for millions of years, sculpting the red Entrada Sandstone into fins, spires and arches of breathtaking diversity. Delicate Arch at sunset is one of the great photographic moments of the American West.',
+        link: 'https://en.wikipedia.org/wiki/Arches_National_Park'
+      },
+      'bryce-canyon': {
+        name: 'Bryce Canyon', cat: 'North America', count: 20,
+        desc: 'Bryce Canyon is not technically a canyon at all — it is a series of natural amphitheaters carved into the edge of the Paunsaugunt Plateau by frost, rain and time. What it creates is unlike anything else on Earth: tens of thousands of hoodoos — tall, impossibly thin spires of orange and white limestone — packed so densely that exploring them feels like walking through a petrified forest from another world. At sunrise, when the first light hits the amphitheater, the rock blazes in shades that shift from deep crimson to burning gold within minutes.',
+        link: 'https://en.wikipedia.org/wiki/Bryce_Canyon_National_Park'
+      },
+      'monumental-valley': {
+        name: 'Monument Valley & Zion', cat: 'North America', count: 20,
+        desc: 'Monument Valley\'s Mittens and Merrick Butte are among the most recognizable landforms on Earth — sandstone monoliths rising 300 meters from a flat desert floor, photographed by John Ford, immortalized by a thousand road movies, and yet still breathtaking in person. Nearby, Zion Canyon offers a completely different experience: a narrow slot of red sandstone, the Virgin River running emerald below, and walls so close and so tall that sunlight only touches the bottom for a few hours each day. Together, they define the American Southwest.',
+        link: 'https://en.wikipedia.org/wiki/Monument_Valley'
+      },
+      'lake-powell': {
+        name: 'Lake Powell', cat: 'North America', count: 20,
+        desc: 'Lake Powell is a place of extraordinary contradiction — a vast artificial reservoir on the Colorado River, born from the flooding of Glen Canyon, yet one of the most visually stunning bodies of water in North America. The lake winds for over 300 kilometers through a labyrinth of sandstone canyons, their sheer walls dropping directly into turquoise water. Rainbow Bridge — one of the world\'s largest natural bridges — is accessible only by boat. At dawn, the stillness is absolute; the canyon walls reflect perfectly in water the color of a tropical sea.',
+        link: 'https://en.wikipedia.org/wiki/Lake_Powell'
+      },
+      'southwest-parks': {
+        name: 'Southwest Parks', cat: 'North America', count: 20,
+        desc: 'The American Southwest is a photographer\'s road trip without equal. In the span of a few days you pass from the coral-pink dunes of Coral Pink Sand Dunes State Park to the hoodoo amphitheaters of Bryce, the alien red arches of Arches, the soaring canyon walls of Canyonlands, and the painted desert of Petrified Forest. Every bend in the road reveals a new composition. The light here — dry, clean and relentless — renders color with an intensity that makes every landscape feel hyper-real.',
+        link: 'https://en.wikipedia.org/wiki/Colorado_Plateau'
+      },
+      'patagonia': {
+        name: 'Patagonia', cat: 'South America', count: 20,
+        desc: 'Patagonia sits at the end of the world — a shared territory of southern Argentina and Chile where the Andes finally dissolve into wind-scoured steppe and the Pacific and Atlantic collide. Torres del Paine National Park is the visual heart of it: three granite towers rising 2,500 meters above a landscape of glacial lakes and ancient lenga beech forests, each turning fiery orange and red in autumn. The weather here changes in minutes — a blue sky replaced by a howling gale, a clearing that reveals a snow-capped peak perfectly reflected in a turquoise lake. Patagonia demands patience and rewards it generously.',
+        link: 'https://en.wikipedia.org/wiki/Patagonia'
+      },
+      'lofoten': {
+        name: 'Lofoten', cat: 'Europe', count: 20,
+        desc: 'The Lofoten Islands of northern Norway are one of Europe\'s most dramatic and photogenic landscapes. An archipelago of sharp, glacier-carved peaks rising almost vertically from the Norwegian Sea, they shelter some of Norway\'s oldest and most picturesque fishing villages — tiny clusters of red rorbuer (fishermen\'s cabins) perched on stilts above the water. In winter, the Northern Lights dance overhead while the long polar night cloaks the fjords in an otherworldly blue twilight. In summer, the midnight sun never sets. Every season offers a completely different and equally astonishing palette.',
+        link: 'https://en.wikipedia.org/wiki/Lofoten'
+      },
+      'dolomitas': {
+        name: 'Dolomites', cat: 'Europe', count: 20,
+        desc: 'The Dolomites of northeastern Italy are among the most photographed mountain landscapes in the world — and they justify every frame. Declared a UNESCO World Heritage Site in 2009, these pale limestone and dolomite towers were shaped by ancient seabeds, volcanic forces and millions of years of erosion into shapes that seem more architectural than geological. The defining photographic moment comes at dawn and dusk, when a phenomenon called enrosadira (from the Ladin word meaning "to turn pink") illuminates the pale rock in shades of coral, salmon and deep rose, changing by the minute as the sun moves.',
+        link: 'https://en.wikipedia.org/wiki/Dolomites'
+      },
+      'roma-napoles': {
+        name: 'Rome & Naples', cat: 'Europe', count: 20,
+        desc: 'Rome is an open-air museum where every piazza, every cobblestone street and every rooftop view tells two thousand years of history. The Colosseum at dawn, before the crowds arrive; the Pantheon\'s oculus pouring a single shaft of light onto the marble floor; the Spanish Steps glowing gold in afternoon sun — these are not clichés but the reason photography exists. Naples, an hour south, is rougher and more electric: Baroque churches piled on Greek ruins, the shadow of Vesuvius hanging over the Bay, and the ruins of Pompeii offering the most haunting snapshot of ancient life ever preserved.',
+        link: 'https://en.wikipedia.org/wiki/Rome'
+      },
+      'sagrada-familia': {
+        name: 'Sagrada Família', cat: 'Europe', count: 20,
+        desc: 'Antoni Gaudí began the Sagrada Família in Barcelona in 1883 and devoted the last 43 years of his life entirely to it — knowing he would never see it completed. More than a century later, it remains under construction, and it remains absolutely unlike any other building on Earth. The exterior is a riot of organic, flowing stone draped in symbolic sculpture. The interior is something else entirely: a forest of branching stone columns, a vaulted ceiling of hyperbolic paraboloids, and walls of stained glass that flood the nave with light in every color of the spectrum — changing hour by hour as the sun moves.',
+        link: 'https://en.wikipedia.org/wiki/Sagrada_Fam%C3%ADlia'
+      },
+      'andorra': {
+        name: 'Andorra', cat: 'Europe', count: 20,
+        desc: 'Wedged between France and Spain high in the eastern Pyrenees, the tiny principality of Andorra packs extraordinary landscape variety into its 468 km². The Madriu-Perafita-Claror Valley — a UNESCO World Heritage Site — preserves a near-pristine glacial landscape of high-altitude lakes, cirques, and ancient transhumance paths. In summer, meadows explode with wildflowers; in autumn, the deciduous forests turn every shade of amber and rust; in winter, the peaks hold some of the best skiing in the Pyrenees. A landscape that rewards slow, attentive photography at every season.',
+        link: 'https://en.wikipedia.org/wiki/Andorra'
+      },
+      'japon': {
+        name: 'Japan', cat: 'Asia', count: 20,
+        desc: 'Japan is a country of extraordinary visual contrasts that somehow coexist in perfect harmony. Ancient Shinto shrines and Zen gardens sit minutes from the neon pulse of Shinjuku and Akihabara. The ephemeral beauty of cherry blossom season — sakura in full bloom for barely two weeks each spring — stops the entire nation and draws photographers from around the world. Arashiyama\'s bamboo groves create a cathedral of green that filters light into something almost sacred. Osaka\'s Dotonbori district blazes with electric color after dark. Japan is not one place but dozens, each as visually rich as the last.',
+        link: 'https://en.wikipedia.org/wiki/Japan'
+      },
+      'kenia': {
+        name: 'Kenya', cat: 'Africa', count: 20,
+        desc: 'Kenya is the undisputed capital of African wildlife photography. The Masai Mara, a vast savannah in southwestern Kenya, hosts the annual Great Migration — the largest movement of land animals on Earth, with over 1.5 million wildebeest and zebra crossing between Tanzania and Kenya every year, pursued by lions, cheetahs and crocodiles. Beyond the Migration, the Mara supports the highest density of large predators of any ecosystem in Africa: lions resting in the golden grass, leopards draped over acacia branches, cheetahs sprinting across the plain. Every hour of light brings something extraordinary.',
+        link: 'https://en.wikipedia.org/wiki/Maasai_Mara'
+      },
+      'marruecos': {
+        name: 'Morocco', cat: 'Africa', count: 20,
+        desc: 'Morocco is a photographer\'s fever dream — a country where ancient Islamic architecture, Saharan landscapes and vibrant street culture converge in a riot of color, texture and light. The medinas of Fes and Marrakech are labyrinths of ochre walls, carved plasterwork and tiled fountains that have changed little in five centuries. The Erg Chebbi dunes near Merzouga rise to 150 meters and turn blood-red at sunset. The Atlas Mountains, snow-capped from autumn to spring, provide a dramatic backdrop to Berber villages clinging to their slopes. Light is Morocco\'s defining element — warm, golden and perpetually flattering.',
+        link: 'https://en.wikipedia.org/wiki/Morocco'
+      },
+      'macro': {
+        name: 'Macro', cat: 'Specialty', count: 20,
+        desc: 'The world of macro photography is essentially a parallel universe — one that exists at scales too small for the unaided eye to appreciate fully, yet which reveals a complexity and beauty that rivals anything in the visible landscape. A compound eye becomes a jeweled mosaic. A water droplet on a petal holds a perfect, inverted reflection of the entire scene around it. The wing scales of a butterfly, magnified, resolve into overlapping iridescent tiles. Working at this scale demands absolute technical precision — millimetric focus, controlled lighting, complete stillness — and rewards it with images that stop people in their tracks.',
+        link: 'https://en.wikipedia.org/wiki/Macro_photography'
+      },
+      'drones': {
+        name: 'Drones', cat: 'Specialty', count: 20,
+        desc: 'Aerial photography has always promised a god\'s-eye view of the world, but until drone technology matured, it was available only to those with access to aircraft. Now, a compact camera hovering silently at altitude can reveal landscape patterns, geometric abstractions and spatial relationships that are simply invisible from the ground. Coastlines resolve into ribbons of contrasting color. Forests reveal canopy textures. Urban grids become circuit boards. Shot with DJI systems across multiple continents, this collection explores what the world looks like when you finally step back far enough to see the whole picture.',
+        link: 'https://en.wikipedia.org/wiki/Aerial_photography'
+      },
+      'aves': {
+        name: 'Birds', cat: 'Wildlife', count: 20,
+        desc: 'Bird photography is one of the most technically demanding disciplines in wildlife photography — and one of the most rewarding. A bird in full flight offers a fraction-of-a-second window: if focus, timing and composition align, the result can be extraordinary. If any of the three fail, the bird is gone. Success demands understanding migration patterns, lighting conditions, and individual species behavior — knowing when a great blue heron will extend its neck to strike, when a peregrine will stoop into a dive. These images were taken across North America and Africa with telephoto lenses and the patience that every wildlife encounter demands.',
+        link: 'https://en.wikipedia.org/wiki/Bird'
+      },
+      'flores': {
+        name: 'Flowers', cat: 'Nature', count: 20,
+        desc: 'Flower photography operates at the intersection of macro detail and compositional artistry. A single blossom, properly lit and framed, can carry the full visual weight of a landscape — its color, its geometry, its texture. The challenge lies in isolating what matters: a clean background that lets the subject breathe, light that renders translucency in petals and catches the glint of morning dew, a depth of field shallow enough to sculpt the flower from its surroundings. Shot across multiple seasons and locations, from Mediterranean wildflowers to tropical orchids, this collection celebrates the extraordinary visual diversity of the plant kingdom.',
+        link: 'https://en.wikipedia.org/wiki/Flower'
+      },
+      'mamiferos': {
+        name: 'Mammals', cat: 'Wildlife', count: 20,
+        desc: 'Mammal photography is as much about behavior as it is about image-making — understanding what an animal is likely to do next, reading the subtle cues in posture and movement that predict whether the next moment will be extraordinary or forgettable. These images span a wide range of species and habitats: the great bison herds of Yellowstone backlit by morning frost; grizzly bears feeding in salmon rivers; African elephants gathered at waterholes at dusk; elusive predators caught in decisive moments. Each photograph is the result of hours — sometimes days — of patient observation and positioning.',
+        link: 'https://en.wikipedia.org/wiki/Mammal'
+      },
+      'wings-over-wayne': {
+        name: 'Wings over Wayne', cat: 'Airshow', count: 20,
+        desc: 'Wings over Wayne, held annually at Seymour Johnson Air Force Base in Goldsboro, North Carolina, is one of the finest airshows on the East Coast of the United States. The event brings together historic warbirds from both World Wars — P-51 Mustangs, B-25 Mitchells, vintage biplanes — alongside active-duty US military aircraft including F-15 Strike Eagles that call the base home. The aerobatic sequences demand the same skills as any action photography: high shutter speeds, continuous autofocus, and the ability to anticipate and track fast-moving subjects against a constantly changing background.',
+        link: 'https://www.seymourjohnson.af.mil/'
+      },
+      'slow-motion': {
+        name: 'Slow Motion', cat: 'Specialty', count: 20,
+        desc: 'Long exposure photography uses time as a creative tool. By leaving the shutter open for seconds, minutes or even hours, the camera accumulates light in a way the human eye cannot — blurring the motion of water into silk, compressing the movement of clouds into sweeping strokes, and turning city traffic into rivers of light. The technique demands a tripod, a remote shutter release, and a willingness to work in conditions — dawn, dusk, deep night — when the quality of light is at its most extraordinary. These images represent a different way of seeing: slower, more contemplative, more abstract.',
+        link: 'https://en.wikipedia.org/wiki/Long-exposure_photography'
+      },
+      'danza': {
+        name: 'Dance', cat: 'Events', count: 20,
+        desc: 'Dance photography is a discipline of split-second decisions. A dancer\'s body passes through a peak moment — a leap at its highest point, an arm extended to its fullest reach, a turn at its fastest rotation — and then it is gone, irrecoverably. Capturing that moment requires anticipation rather than reaction: you must visualize the shot a fraction of a second before it happens and press the shutter at the exact right instant. These images were shot at intimate performance events, working with available stage lighting and fast lenses to freeze movement while preserving the atmosphere that makes live performance so compelling.',
+        link: 'https://en.wikipedia.org/wiki/Dance_photography'
+      },
+      'rodeo': {
+        name: 'Rodeo', cat: 'Events', count: 20,
+        desc: 'The American rodeo is one of the most viscerally exciting events to photograph. The action is explosive, unpredictable and over in seconds — a bull rider must stay aboard for exactly eight seconds or be thrown, and those eight seconds contain more drama than most sports manage in an hour. Barrel racers push horse and rider through impossibly tight turns at full gallop, spraying arena dirt in every direction. The photographic challenge is pure action sports: high shutter speeds, burst shooting, reading the animal\'s movement to anticipate where the decisive moment will be. These images were taken at traditional American rodeo events across the Southwest.',
+        link: 'https://en.wikipedia.org/wiki/Rodeo'
+      },
+    };
+
+    function imgPath(key, n) {
+      if (isLocal) return LOCAL_BASE + key + '/' + String(n).padStart(2, '0') + '.jpg';
+      const imgs = GALLERY_IMAGES[key];
+      return imgs ? WP + imgs[n - 1] : '';
+    }
+
+    /* ── Gallery modal ─────────────────────────────────────────── */
+    const galModal  = document.getElementById('galModal');
+    const galGrid   = document.getElementById('galGrid');
+    const galCatEl  = document.getElementById('galCat');
+    const galNameEl = document.getElementById('galName');
+    const galDescEl = document.getElementById('galDesc');
+    const galLinkEl = document.getElementById('galLink');
+    const galCountEl= document.getElementById('galCount');
+    let activeGallery = null;
+
+    function openGallery(key) {
+      const meta = GALLERY_META[key];
+      if (!meta) return;
+      activeGallery = key;
+
+      galCatEl.textContent  = meta.cat;
+      galNameEl.textContent = meta.name;
+      galDescEl.textContent = meta.desc;
+      galLinkEl.href        = meta.link;
+      galCountEl.textContent = meta.count + ' photographs';
+
+      galGrid.innerHTML = '';
+      for (let i = 1; i <= meta.count; i++) {
+        const src   = imgPath(key, i);
+        const idx   = i - 1;
+        const thumb = document.createElement('div');
+        thumb.className = 'gal-thumb';
+        thumb.style.backgroundImage = `url('${src}')`;
+        thumb.setAttribute('role', 'button');
+        thumb.setAttribute('tabindex', '0');
+        thumb.setAttribute('aria-label', `Photo ${i}`);
+        thumb.addEventListener('click', () => openLightbox(key, meta.count, idx));
+        thumb.addEventListener('keydown', e => {
+          if (e.key === 'Enter' || e.key === ' ') openLightbox(key, meta.count, idx);
+        });
+        galGrid.appendChild(thumb);
+      }
+
+      document.body.style.overflow = 'hidden';
+      galModal.classList.add('open');
+      document.getElementById('galClose').focus();
+    }
+
+    function closeGallery() {
+      galModal.classList.remove('open');
+      document.body.style.overflow = '';
+      activeGallery = null;
+    }
+
+    document.getElementById('galClose').addEventListener('click', closeGallery);
+    galModal.addEventListener('click', e => {
+      if (e.target === galModal) closeGallery();
+    });
+
+    /* ── Lightbox ──────────────────────────────────────────────── */
+    const lightbox  = document.getElementById('lightbox');
+    const lbImg     = document.getElementById('lbImg');
+    const lbCounter = document.getElementById('lbCounter');
+    let lbKey   = null;
+    let lbCount = 0;
+    let lbIdx   = 0;
+
+    function openLightbox(key, count, idx) {
+      lbKey = key; lbCount = count; lbIdx = idx;
+      loadLbImage();
+      lightbox.classList.add('open');
+      document.getElementById('lbClose').focus();
+    }
+
+    function loadLbImage() {
+      lbImg.classList.add('loading');
+      const src = imgPath(lbKey, lbIdx + 1);
+      const tmp = new Image();
+      tmp.onload  = () => { lbImg.src = src; lbImg.classList.remove('loading'); };
+      tmp.onerror = () => { lbImg.src = src; lbImg.classList.remove('loading'); };
+      tmp.src = src;
+      lbCounter.textContent = `${lbIdx + 1} / ${lbCount}`;
+    }
+
+    function closeLightbox() { lightbox.classList.remove('open'); }
+
+    document.getElementById('lbClose').addEventListener('click', closeLightbox);
+    document.getElementById('lbPrev').addEventListener('click', () => {
+      lbIdx = (lbIdx - 1 + lbCount) % lbCount; loadLbImage();
+    });
+    document.getElementById('lbNext').addEventListener('click', () => {
+      lbIdx = (lbIdx + 1) % lbCount; loadLbImage();
+    });
+    lightbox.addEventListener('click', e => { if (e.target === lightbox) closeLightbox(); });
+
+    /* ── Portfolio click handler ───────────────────────────────── */
+    document.getElementById('portfolioGrid').addEventListener('click', e => {
+      const item = e.target.closest('.p-item');
+      if (!item) return;
+      const galleryKey = item.dataset.gallery;
+      if (galleryKey) {
+        e.preventDefault();
+        openGallery(galleryKey);
+      }
+    });
+
+    /* ── Keyboard navigation ───────────────────────────────────── */
+    document.addEventListener('keydown', e => {
+      if (lightbox.classList.contains('open')) {
+        if (e.key === 'Escape')        closeLightbox();
+        else if (e.key === 'ArrowLeft')  { lbIdx = (lbIdx - 1 + lbCount) % lbCount; loadLbImage(); }
+        else if (e.key === 'ArrowRight') { lbIdx = (lbIdx + 1) % lbCount;            loadLbImage(); }
+      } else if (galModal.classList.contains('open')) {
+        if (e.key === 'Escape') closeGallery();
+      }
+    });
+
+    /* ── Touch / swipe support ─────────────────────────────────── */
+    let lbTouchX = 0;
+    lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+    lightbox.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - lbTouchX;
+      if (Math.abs(dx) > 40) {
+        if (dx < 0) { lbIdx = (lbIdx + 1) % lbCount; }
+        else        { lbIdx = (lbIdx - 1 + lbCount) % lbCount; }
+        loadLbImage();
+      }
+    }, { passive: true });
+
+    /* Hero swipe on mobile — swipe changes slide, tap opens gallery */
+    const heroEl = document.getElementById('home');
+    let heroTouchX = 0, heroTouchY = 0;
+    heroEl.addEventListener('touchstart', e => {
+      heroTouchX = e.touches[0].clientX;
+      heroTouchY = e.touches[0].clientY;
+    }, { passive: true });
+    heroEl.addEventListener('touchend', e => {
+      heroWasTouch = true;
+      setTimeout(() => { heroWasTouch = false; }, 600);
+      if (e.target.closest('.hero-dot') || e.target.closest('nav')) return;
+      const dx = e.changedTouches[0].clientX - heroTouchX;
+      const dy = e.changedTouches[0].clientY - heroTouchY;
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        clearInterval(timer);
+        if (dx < 0) goTo((current + 1) % SLIDES.length);
+        else        goTo((current - 1 + SLIDES.length) % SLIDES.length);
+        timer = setInterval(() => goTo((current + 1) % SLIDES.length), 5000);
+      } else if (Math.abs(dx) < 10 && Math.abs(dy) < 10) {
+        const gallery = SLIDES[current].gallery;
+        if (gallery) openGallery(gallery);
+      }
+    }, { passive: true });
+
+    /* Gallery modal — swipe down to close */
+    let galTouchY = 0;
+    galModal.addEventListener('touchstart', e => { galTouchY = e.touches[0].clientY; }, { passive: true });
+    galModal.addEventListener('touchend', e => {
+      const dy = e.changedTouches[0].clientY - galTouchY;
+      if (dy > 80 && e.target === galModal) closeGallery();
+    }, { passive: true });
+  </script>
+
+</body>
+</html>
