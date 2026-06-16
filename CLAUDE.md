@@ -75,14 +75,49 @@ Mi Pagina Web/
 All portfolio items have a `data-gallery="[key]"` attribute. A click listener on `#portfolioGrid` intercepts clicks: if the item has `data-gallery`, it calls `openGallery(key)` and prevents the default `href` navigation. Items without `data-gallery` fall through to the `href` and open cornellana.online in a new tab.
 
 `GALLERY_META` in the JS maps each key to:
-- `name`, `cat` — display name and category label
+- `name`, `cat` — display name and category label (English)
+- `catKey` — snake_case key used to look up the translated category in `TRANSLATIONS` (e.g. `'north_america'` → `cat_north_america`)
 - `count` — number of photos (always 20)
-- `desc` — a 3–5 sentence description of the location/discipline
+- `desc` — object `{ en, ca, es }` with a 3–5 sentence description per language
 - `link` — Wikipedia URL or authoritative external link
 
 `imgPath(key, n)` builds the relative path `../../Pictures/Portfolio/[key]/NN.jpg` where `NN` is zero-padded (01, 02 … 20).
 
 The gallery modal shows description + link in the header. Clicking a thumbnail opens the lightbox; ←/→ arrow keys and the nav buttons navigate between images; `Escape` closes.
+
+---
+
+## Multi-language system (CA / ES / EN)
+
+The site supports three languages: **Catalan (CA)**, **Castilian/Spanish (ES)**, and **English (EN)**. The language selector appears in the navigation bar (desktop: inline after the nav links; mobile: inside the fullscreen hamburger overlay).
+
+### How it works
+
+- `let currentLang` — tracks the active language; initialised from `localStorage.getItem('lang')`, defaulting to `'en'`.
+- `const TRANSLATIONS` — a single JS object with keys `en`, `ca`, `es`. Each sub-object maps translation keys to the localised string. Keys follow the pattern: `nav_*` (nav links), `hero_*`, `port_*`, `f_*` (filter buttons), `cat_*` (category labels), `item_*` (portfolio item names), `cal_*`, `bio_*`, `gear_*`, `lic_*`, `cont_*`, `footer_*`, `gal_*`.
+- `function setLang(lang)` — updates `currentLang`, saves to `localStorage`, sets `document.documentElement.lang`, then replaces `textContent` on every `[data-i18n]` element and `innerHTML` on every `[data-i18n-html]` element. Also updates `.lang-btn.active` CSS class.
+- `setLang(currentLang)` is called once at the end of the `<script>` block to apply the stored language on page load.
+
+### Attribute conventions
+
+| Attribute | Used when | JS handler |
+|-----------|-----------|------------|
+| `data-i18n="key"` | Plain text, no HTML tags | `el.textContent = T[key]` |
+| `data-i18n-html="key"` | Contains `<br>`, `<em>`, `<strong>` | `el.innerHTML = T[key]` |
+
+### Adding or editing translations
+
+1. Add the new string under all three language keys in `TRANSLATIONS`.
+2. Add `data-i18n="key"` (or `data-i18n-html="key"`) to the HTML element.
+3. No build step needed — `setLang()` will pick it up automatically.
+
+### Gallery descriptions
+
+`GALLERY_META[key].desc` is now an object `{ en: '...', ca: '...', es: '...' }` for all 28 galleries. `openGallery()` reads `meta.desc[currentLang]` (falling back to `meta.desc.en`). `meta.catKey` (e.g. `'north_america'`) is used to look up `TRANSLATIONS[currentLang]['cat_' + meta.catKey]`.
+
+### Hero location badge
+
+`showLocation()` translates the slide `cat` field via an inline `catKeyMap` object mapping English category names to their translation keys.
 
 ---
 
