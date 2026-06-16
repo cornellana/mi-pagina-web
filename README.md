@@ -1,6 +1,6 @@
 # Francisco Cornellana Photography
 
-Portfolio web personal de **Francisco Cornellana**, fotógrafo de viajes, naturaleza y eventos basado en el Reino Unido. La web muestra 28 galerías de fotografía organizadas por categoría, con soporte completo para tres idiomas (inglés, castellano y catalán) y diseño adaptado a móvil, tablet y escritorio.
+Portfolio web personal de **Francisco Cornellana**, fotógrafo de viajes, naturaleza y eventos basado en Andorra. La web muestra galerías de fotografía organizadas por categoría, con soporte completo para tres idiomas (inglés, castellano y catalán) y diseño adaptado a móvil, tablet y escritorio.
 
 🌐 **Web en línea:** [cornellana.github.io/mi-pagina-web](https://cornellana.github.io/mi-pagina-web/)
 
