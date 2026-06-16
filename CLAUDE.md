@@ -8,6 +8,59 @@ The site is opened directly from the filesystem via `file://` in Safari or Chrom
 
 ---
 
+## Adding a new gallery — step-by-step workflow
+
+This is the routine to add any new event or location gallery to the site.
+
+### Step 1 — Drop photos into a new folder
+
+Create a subfolder inside `~/Pictures/Portfolio/` with a lowercase, hyphenated key name that will identify the gallery permanently (e.g. `rodeo-2025`, `jazz-festival`, `sierra-nevada`).
+
+Copy all photos into that folder. Names at this point can be anything (original camera names are fine).
+
+### Step 2 — Rename photos to sequential format
+
+The gallery loader expects files named `01.jpg`, `02.jpg`, `03.jpg` … Run:
+
+```bash
+cd ~/Downloads/Mi\ Pagina\ Web
+./rename_photos.sh <folder-name>
+```
+
+For example:
+```bash
+./rename_photos.sh rodeo-2025
+```
+
+The script sorts all JPG/JPEG files alphabetically (which preserves chronological camera order) and renames them in two passes to avoid conflicts. Output confirms each rename. Photos can now be opened locally by the gallery.
+
+### Step 3 — Tell Claude to add the gallery
+
+Tell me:
+- **Folder key** (must match the folder name exactly, e.g. `rodeo-2025`)
+- **Display name** in English (e.g. `Rodeo 2025`)
+- **Filter category**: `america` · `europa` · `mundo` · `naturaleza` · `eventos`
+
+Optionally:
+- Which photo number to use as cover thumbnail (default: `01`)
+- A Wikipedia or external link for "Learn more"
+
+Claude will then:
+1. Add one line to `GALLERY_UI` in `index.html`
+2. Add the full `GALLERY_META` entry with descriptions in EN/CA/ES
+3. Add the `item_*` translation keys to `TRANSLATIONS` if the name differs between languages
+4. Commit and push to GitHub
+
+The portfolio grid is built dynamically from `GALLERY_META` — no HTML needs to be touched. The gallery appears automatically.
+
+### What Claude does NOT need from you
+
+- No manual HTML editing
+- No count of photos (the gallery probes the folder automatically)
+- No renaming of photos beyond running `rename_photos.sh`
+
+---
+
 ## Design system
 
 Dark minimalist aesthetic. All variables live in `:root`:
@@ -77,9 +130,16 @@ All portfolio items have a `data-gallery="[key]"` attribute. A click listener on
 `GALLERY_META` in the JS maps each key to:
 - `name`, `cat` — display name and category label (English)
 - `catKey` — snake_case key used to look up the translated category in `TRANSLATIONS` (e.g. `'north_america'` → `cat_north_america`)
-- `count` — number of photos (always 20)
 - `desc` — object `{ en, ca, es }` with a 3–5 sentence description per language
 - `link` — Wikipedia URL or authoritative external link
+
+`GALLERY_UI` is a separate compact object (one line per gallery) with:
+- `filter` — portfolio filter category: `america|europa|mundo|naturaleza|eventos`
+- `cover` — remote cover image filename (used on GitHub Pages; local uses `01.jpg`)
+- `page` — cornellana.online page_id for the fallback link (optional)
+- `nameKey` — translation key for galleries with a translated name (optional)
+
+The portfolio grid is built entirely in JS by `buildPortfolioGrid()` from these two objects. No HTML items are hardcoded — adding a new gallery only requires entries in `GALLERY_META` and `GALLERY_UI`.
 
 `imgPath(key, n)` builds the relative path `../../Pictures/Portfolio/[key]/NN.jpg` where `NN` is zero-padded (01, 02 … 20).
 
