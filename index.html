@@ -704,20 +704,22 @@
       color: var(--muted);
     }
 
-    .gal-grid {
+    .gal-grid-scroll {
       flex: 1;
       min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+    }
+    .gal-grid-scroll::-webkit-scrollbar { width: 4px; }
+    .gal-grid-scroll::-webkit-scrollbar-track { background: transparent; }
+    .gal-grid-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+    .gal-grid {
       padding: 1.5rem 2rem;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
       gap: 3px;
       align-content: start;
     }
-    .gal-grid::-webkit-scrollbar { width: 4px; }
-    .gal-grid::-webkit-scrollbar-track { background: transparent; }
-    .gal-grid::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
 
     .gal-thumb {
       aspect-ratio: 4/3;
@@ -1084,7 +1086,9 @@
         <span class="gal-count" id="galCount"></span>
       </div>
     </div>
-    <div class="gal-grid" id="galGrid"></div>
+    <div class="gal-grid-scroll">
+      <div class="gal-grid" id="galGrid"></div>
+    </div>
   </div>
 
   <!-- ── Lightbox ──────────────────────────────────────────────────── -->
