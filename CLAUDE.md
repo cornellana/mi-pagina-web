@@ -244,29 +244,79 @@ A dark gradient (`#home::before`) ensures nav links are always legible regardles
 
 The site is designed to look and feel as polished on a phone as on a 27-inch desktop monitor. Every layout decision uses responsive techniques, not fixed pixel widths.
 
-**What adapts below 860 px (tablet and phone):**
+## How to test on iPhone (without a real device)
+
+### Option A — Safari Responsive Design Mode (recommended)
+
+This is the best local option: loads the `file://` page including all local photos.
+
+1. Open `index.html` in Safari on Mac.
+2. Make sure the **Develop** menu is visible — if not: Safari → Settings → Advanced → tick *Show features for web developers*.
+3. Press **⌥⌘R** (Option + Cmd + R) to enter Responsive Design Mode.
+4. In the device bar at the top, select the iPhone model to simulate (e.g. iPhone 16 Pro).
+5. The page renders at the exact iPhone viewport size. Local photos load correctly.
+
+> If photos don't appear, go to **Develop → Disable Cross-Origin Restrictions**.
+
+### Option B — Xcode iOS Simulator
+
+Shows the real Safari app on a simulated iPhone, but **local `file://` photos will not load** (simulator Safari is sandboxed). Useful to verify layout and interactions, not photo display.
+
+```bash
+# Launch the simulator from Terminal
+open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app
+
+# Or boot a specific device and open the page in its Safari
+xcrun simctl boot 2EBAD34E-A98C-4401-B9E3-DBFDC7ABA323   # iPhone 17 Pro
+xcrun simctl openurl booted "file:///Users/Francisco_1/Downloads/Mi%20Pagina%20Web/index.html" &
+```
+
+To list available simulators: `xcrun simctl list devices available | grep -i iphone`
+
+---
+
+## What adapts below 860 px (tablet and phone)
+
 - Nav collapses to a hamburger menu. The mobile nav opens as a full-screen overlay (`position: fixed; inset: 0`) with centred links, preventing any scroll or interaction bleed.
-- The hero `padding` shrinks to `0 1.5rem 4rem` — enough breathing room on a 375px iPhone.
+- The hero `padding` shrinks to `0 1.5rem 8rem` — enough breathing room on a 375px iPhone.
 - The biography section switches from a two-column grid to a single column; the portrait photo moves above the text (`order: -1`) so the reader sees the face immediately.
 - The year-archive row (`#calendar`) stacks vertically, one card per row.
 - The contact section stacks to a single column.
 - Footer centres and stacks.
-- The scroll-hint text element is hidden (no room, no mouse to trigger it).
+- Gallery header description shows as a **3-line clamp** (`-webkit-line-clamp: 3`) instead of the full paragraph, to leave room for the photo grid.
 
-**What adapts below 520 px (small phones):**
+## What adapts below 520 px (small phones)
+
 - Portfolio grid forces two columns (previously auto-fill with 260 px minimum).
 - Filter bar expands to full width with equal-width buttons.
 - Gallery grid thumbnails go to two columns.
 
-**Typography:** All font sizes use `clamp()` or unitless `rem` values — they scale with the user's browser font-size preference and respect Dynamic Type / system accessibility font sizes.
+## Typography
 
-**Touch targets:** All interactive elements (nav links, filter buttons, dot navigation, gallery thumbnails, lightbox controls) meet or exceed 44×44 px touch targets per Apple HIG guidelines.
+All font sizes use `clamp()` or unitless `rem` values — they scale with the user's browser font-size preference and respect Dynamic Type / system accessibility font sizes.
 
-**Testing protocol:**
-1. Open `index.html` in Safari on iPhone (via AirDrop or USB → Files).
-2. Verify: hero fills screen; nav hamburger opens cleanly; portfolio grid is 2-column; gallery modal opens and scrolls; lightbox image fills the viewport; swipe-left/right on lightbox nav buttons works.
-3. Rotate to landscape and verify nothing breaks.
-4. Test on iPad (mini and Pro) in both orientations — especially the biography two-column layout, which should remain at 860 px+ breakpoint on iPad landscape.
+## Touch targets
+
+All interactive elements (nav links, filter buttons, dot navigation, gallery thumbnails, lightbox controls) meet or exceed 44×44 px touch targets per Apple HIG guidelines.
+
+## Known mobile quirks and fixes applied
+
+| Problem | Cause | Fix applied |
+|---------|-------|-------------|
+| Hero slideshow didn't fill the full viewport height | `100svh` not always computed correctly in Safari iOS | Changed to `height: 100vh; height: 100dvh` (dvh = dynamic viewport height, adjusts as browser chrome shows/hides) |
+| Gallery description invisible on mobile | `display: none` was set explicitly at ≤860 px | Replaced with 3-line clamp so the description is visible but compact |
+| Gallery photo grid overlapped instead of scrolling | Safari doesn't scroll a `display:grid` element that is also the `overflow-y:auto` flex child | Wrapped grid in a separate `.gal-grid-scroll` div (scroll container) so the grid itself can grow freely |
+
+## Testing checklist
+
+1. Open `index.html` in Safari → Responsive Design Mode → iPhone 16 Pro.
+2. Hero fills the full screen (no black bars, no overflow).
+3. Nav hamburger opens as full-screen overlay; language selector visible inside it.
+4. Portfolio grid is 2-column on small phones.
+5. Opening a gallery: description shows (3 lines); photo grid scrolls; thumbnails are 2-column.
+6. Lightbox: image fills viewport; prev/next arrows work; location label visible on photos with GPS.
+7. Rotate to landscape — hero, portfolio, and gallery still look correct.
+8. Test on iPad (mini and Pro) in both orientations — biography two-column layout should remain at ≥860 px breakpoint on iPad landscape.
 
 ---
 
