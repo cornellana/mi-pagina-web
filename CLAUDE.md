@@ -49,15 +49,42 @@ Claude will then:
 1. Add one line to `GALLERY_UI` in `index.html`
 2. Add the full `GALLERY_META` entry with descriptions in EN/CA/ES
 3. Add the `item_*` translation keys to `TRANSLATIONS` if the name differs between languages
-4. Commit and push to GitHub
+4. **Extract GPS coordinates** from EXIF metadata of every photo in the folder using `exiftool`
+5. **Reverse-geocode** each unique coordinate cluster via Nominatim (OpenStreetMap, 1 req/sec) to obtain place names
+6. Add a `GALLERY_LOCATIONS['folder-key']` entry to `index.html` mapping each photo (`'01'`, `'02'`…) to its location string
+7. Commit and push to GitHub
 
-The portfolio grid is built dynamically from `GALLERY_META` — no HTML needs to be touched. The gallery appears automatically.
+The location label appears in the lightbox (white text, gold marker, bottom-centre) whenever a photo has GPS data. Galleries without GPS simply show no label.
 
 ### What Claude does NOT need from you
 
 - No manual HTML editing
 - No count of photos (the gallery probes the folder automatically)
 - No renaming of photos beyond running `rename_photos.sh`
+- No GPS data — Claude reads it automatically from the photo EXIF metadata
+
+### GPS location workflow detail
+
+```bash
+# 1. Extract decimal GPS for all photos in order (alphabetical = same as rename script)
+exiftool -csv -n -GPSLatitude -GPSLongitude ~/Pictures/Portfolio/<key>/*.jpg
+
+# 2. Cluster photos within ~0.05° of each other → one Nominatim call per cluster
+curl -s "https://nominatim.openstreetmap.org/reverse?lat=LAT&lon=LON&format=json&zoom=16&accept-language=en" \
+  -H "User-Agent: FranciscoCornellanaPortfolio/1.0"
+# Extract: tourism > natural > waterway > leisure > peak > village > first word of display_name
+
+# 3. Add to GALLERY_LOCATIONS in index.html:
+const GALLERY_LOCATIONS = {
+  'gallery-key': {
+    '01': 'Place Name, Region',
+    '02': 'Place Name, Region',
+    ...
+  }
+};
+```
+
+Photos without GPS (studio shots, events) are simply omitted from `GALLERY_LOCATIONS` — no label shows in the lightbox for those photos.
 
 ---
 
