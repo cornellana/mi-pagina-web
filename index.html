@@ -812,6 +812,19 @@
       letter-spacing: 0.2em;
       color: rgba(255,255,255,0.3);
     }
+    .lb-location {
+      position: absolute;
+      bottom: 3rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      white-space: nowrap;
+      display: none;
+    }
+    .lb-location::before { content: '◉  '; font-size: 0.55rem; }
 
     /* ─── Responsive ─────────────────────────────────────────────── */
     @media (max-width: 860px) {
@@ -1098,6 +1111,7 @@
     <img class="lb-img" id="lbImg" src="" alt="Photography">
     <button class="lb-nav lb-next" id="lbNext" aria-label="Next">&#8594;</button>
     <span class="lb-counter" id="lbCounter"></span>
+    <span class="lb-location" id="lbLocation"></span>
   </div>
 
   <script>
@@ -1263,7 +1277,7 @@
         item_rome_naples:'Rome &amp; Naples', item_japan:'Japan', item_kenya:'Kenya',
         item_morocco:'Morocco', item_birds:'Birds', item_flowers:'Flowers',
         item_mammals:'Mammals', item_slow_motion:'Slow Motion', item_dance:'Dance',
-        item_faroe_islands:'Faroe Islands',
+        item_iceland:'Iceland', item_faroe_islands:'Faroe Islands',
         cal_label:'Archive', cal_title:'By Year', cal_view:'View gallery',
         bio_label:'About', bio_title:'Biography',
         bio_p1:'Francisco Cornellana is a travel and wildlife photographer originally from Andorra, based in the UK, with over a decade of work spanning six continents and some of the planet\'s most extraordinary landscapes.',
@@ -1307,7 +1321,7 @@
         item_rome_naples:'Roma i Nàpols', item_japan:'Japó', item_kenya:'Kenya',
         item_morocco:'Marroc', item_birds:'Ocells', item_flowers:'Flors',
         item_mammals:'Mamífers', item_slow_motion:'Càmera Lenta', item_dance:'Dansa',
-        item_faroe_islands:'Illes Fèroe',
+        item_iceland:'Islàndia', item_faroe_islands:'Illes Fèroe',
         cal_label:'Arxiu', cal_title:'Per Any', cal_view:'Veure galeria',
         bio_label:'Sobre', bio_title:'Biografia',
         bio_p1:'Francisco Cornellana és un fotògraf de viatges i natura originari d\'Andorra, establert al Regne Unit, amb més d\'una dècada de trajectòria que abraça sis continents i alguns dels paisatges més extraordinaris del planeta.',
@@ -1351,7 +1365,7 @@
         item_rome_naples:'Roma y Nápoles', item_japan:'Japón', item_kenya:'Kenia',
         item_morocco:'Marruecos', item_birds:'Aves', item_flowers:'Flores',
         item_mammals:'Mamíferos', item_slow_motion:'Cámara Lenta', item_dance:'Danza',
-        item_faroe_islands:'Islas Feroe',
+        item_iceland:'Islandia', item_faroe_islands:'Islas Feroe',
         cal_label:'Archivo', cal_title:'Por Año', cal_view:'Ver galería',
         bio_label:'Sobre mí', bio_title:'Biografía',
         bio_p1:'Francisco Cornellana es un fotógrafo de viajes y naturaleza originario de Andorra, afincado en el Reino Unido, con más de una década de trabajo que abarca seis continentes y algunos de los paisajes más extraordinarios del planeta.',
@@ -1566,6 +1580,12 @@
           ca:'El rodeo americà és un dels esdeveniments esportius i culturals més fotogènicament intensos dels Estats Units. La pols de l\'arena, la tensió dels llaçadors i la força explosiva dels braus combinen per crear un espectacle visual d\'una energia primordial. Fotografiar un rodeo exigeix velocitats d\'obturador extremes, una lectura ràpida de l\'acció i un posicionament que permeti capturar les expressions dels participants. L\'escenari nocturn, amb la llum artificial de l\'estadi, amplifica el dramatisme de les imatges.',
           es:'El rodeo americano es uno de los eventos deportivos y culturales más fotogénicamente intensos de Estados Unidos. El polvo de la arena, la tensión de los lariseros y la fuerza explosiva de los toros combinan para crear un espectáculo visual de una energía primordial. Fotografiar un rodeo exige velocidades de obturación extremas, una lectura rápida de la acción y un posicionamiento que permita capturar las expresiones de los participantes. El escenario nocturno, con la luz artificial del estadio, amplifica el dramatismo de las imágenes.'
         }},
+      'islandia': { name:'Iceland', cat:'Europe', catKey:'europe', count:46, link:'https://en.wikipedia.org/wiki/Iceland',
+        desc:{
+          en:'Iceland is a Nordic island nation straddling the Mid-Atlantic Ridge — geologically one of the most active places on Earth, where volcanic fire and glacial ice meet in landscapes found nowhere else on the planet. Waterfalls plunge off basalt plateaux, geothermal vents boil and hiss at Námafjall and Hverir, and the midnight sun casts long golden light over crater lakes and lava fields. These images span several of Iceland\'s most dramatic locations: Goðafoss, one of the country\'s most beautiful waterfalls; Dettifoss, the most powerful waterfall in Europe; the geothermal landscapes of Mývatn; the volcanic Snæfellsnes Peninsula with its glacier and coastal cliffs; and the remote highland route of Sprengisandur across Iceland\'s uninhabited interior.',
+          ca:'Islàndia és una nació insular nòrdica que s\'estén sobre la Dorsal Mesoatlàntica — un dels llocs geològicament més actius de la Terra, on el foc volcànic i el gel glacial es troben en paisatges únics al planeta. Les cascades cauen des de plateaux de basalt, les fumaroles bullen i xiulen a Námafjall i Hverir, i el sol de mitjanit projecta llum daurada sobre llacs de cràter i camps de lava. Aquestes imatges abasten alguns dels llocs més dramàtics d\'Islàndia: Goðafoss, una de les cascades més belles del país; Dettifoss, la cascada més poderosa d\'Europa; els paisatges geotèrmics de Mývatn; la volcànica Península de Snæfellsnes amb el seu glaciar i penya-segats costers; i la remota ruta de les terres altes de Sprengisandur.',
+          es:'Islandia es una nación insular nórdica que se extiende sobre la Dorsal Mesoatlántica — uno de los lugares geológicamente más activos de la Tierra, donde el fuego volcánico y el hielo glacial se encuentran en paisajes únicos en el planeta. Las cascadas caen desde mesetas de basalto, las fumarolas burbujean y silban en Námafjall y Hverir, y el sol de medianoche proyecta una luz dorada sobre lagos de cráter y campos de lava. Estas imágenes abarcan algunos de los lugares más dramáticos de Islandia: Goðafoss, una de las cascadas más bellas del país; Dettifoss, la cascada más poderosa de Europa; los paisajes geotérmicos de Mývatn; la volcánica Península de Snæfellsnes con su glaciar y acantilados costeros; y la remota ruta de las tierras altas de Sprengisandur.'
+        }},
       'islas-feroes': { name:'Faroe Islands', cat:'Europe', catKey:'europe', count:37, link:'https://en.wikipedia.org/wiki/Faroe_Islands',
         desc:{
           en:'The Faroe Islands are an autonomous archipelago of 18 islands rising from the North Atlantic, midway between Norway, Iceland and Scotland. Remote, often shrouded in Atlantic mist and prone to sudden weather shifts within the same hour, these islands offer a rare photographic environment: saturated green cliffs plunging into steel-grey sea, turf-roofed villages clinging to near-vertical hillsides, and skies that can move from flat overcast to dramatic shafts of golden light in minutes. The island of Vágar\'s Sørvágsvatn lake appears to float above the ocean — an optical illusion born of altitude and perspective. Puffins nest in their tens of thousands on the sea cliffs each summer, indifferent to the wind and fog that make photography both demanding and extraordinary.',
@@ -1606,7 +1626,37 @@
       'slow-motion':      { filter:'naturaleza', cover:'7R39766-scaled-1.jpg',                     page:2973, nameKey:'item_slow_motion' },
       'danza':            { filter:'eventos',    cover:'Sony-a7rIV4155-SM-scaled-1.jpg',           page:3874, nameKey:'item_dance' },
       'rodeo':            { filter:'eventos',    cover:'Rodeo-ON1-_7R31709-scaled-1.jpg',          page:2967 },
+      'islandia':         { filter:'europa',     cover:'',                                          page:null, nameKey:'item_iceland' },
       'islas-feroes':     { filter:'europa',     cover:'',                                          page:null, nameKey:'item_faroe_islands' },
+    };
+
+    /* ── Per-photo location data derived from EXIF GPS coordinates ── */
+    const GALLERY_LOCATIONS = {
+      'islandia': {
+        '01':'Búðir, Snæfellsnes',        '02':'Northeastern Iceland',
+        '03':'Northeastern Iceland',       '04':'Námafjall — Hverir, Mývatn',
+        '05':'Goðafoss',                   '06':'Goðafoss',
+        '07':'Kirkjufell, Snæfellsnes',    '08':'Kirkjufell, Snæfellsnes',
+        '09':'Kirkjufell, Snæfellsnes',    '10':'Búðir, Snæfellsnes',
+        '11':'Arnarstapi, Snæfellsnes',    '12':'Snæfellsnes Peninsula',
+        '13':'Snæfellsnes Peninsula',      '14':'Hvítserkur',
+        '15':'Hvítserkur',                 '16':'Húnafjörður',
+        '17':'Húnafjörður',                '18':'Goðafoss',
+        '19':'Goðafoss',                   '20':'Sprengisandur Highlands',
+        '21':'Sprengisandur Highlands',    '22':'Northeastern Iceland',
+        '23':'Northeastern Iceland',       '24':'Northeastern Iceland',
+        '25':'Northeastern Iceland',       '26':'Dettifoss',
+        '27':'Goðafoss',                   '28':'Goðafoss',
+        '29':'Námafjall — Hverir, Mývatn', '30':'Námafjall — Hverir, Mývatn',
+        '31':'Mývatn',                     '32':'Mývatn',
+        '33':'Mývatn',                     '34':'Námafjall — Hverir, Mývatn',
+        '35':'Námafjall — Hverir, Mývatn', '36':'Námafjall — Hverir, Mývatn',
+        '37':'Námafjall — Hverir, Mývatn', '38':'Námafjall — Hverir, Mývatn',
+        '39':'Námafjall — Hverir, Mývatn', '40':'Námafjall — Hverir, Mývatn',
+        '41':'Námafjall — Hverir, Mývatn', '42':'Námafjall — Hverir, Mývatn',
+        '43':'Námafjall — Hverir, Mývatn', '44':'Námafjall — Hverir, Mývatn',
+        '45':'Námafjall — Hverir, Mývatn', '46':'Goðafoss'
+      }
     };
 
     /* Builds the portfolio grid from GALLERY_META + GALLERY_UI.
@@ -1744,9 +1794,10 @@
     });
 
     /* ── Lightbox ──────────────────────────────────────────────── */
-    const lightbox  = document.getElementById('lightbox');
-    const lbImg     = document.getElementById('lbImg');
-    const lbCounter = document.getElementById('lbCounter');
+    const lightbox   = document.getElementById('lightbox');
+    const lbImg      = document.getElementById('lbImg');
+    const lbCounter  = document.getElementById('lbCounter');
+    const lbLocation = document.getElementById('lbLocation');
     let lbIdx = 0;
 
     function openLightbox(idx) {
@@ -1764,6 +1815,10 @@
       tmp.onerror = () => { lbImg.src = src; lbImg.classList.remove('loading'); };
       tmp.src = src;
       lbCounter.textContent = `${lbIdx + 1} / ${galSrcs.length}`;
+      const locs = activeGallery && GALLERY_LOCATIONS[activeGallery];
+      const loc  = locs && locs[String(lbIdx + 1).padStart(2, '0')];
+      lbLocation.textContent = loc || '';
+      lbLocation.style.display = loc ? 'block' : 'none';
     }
 
     function closeLightbox() { lightbox.classList.remove('open'); }
