@@ -283,7 +283,7 @@ To list available simulators: `xcrun simctl list devices available | grep -i iph
 - The year-archive row (`#calendar`) stacks vertically, one card per row.
 - The contact section stacks to a single column.
 - Footer centres and stacks.
-- Gallery header description shows as a **3-line clamp** (`-webkit-line-clamp: 3`) instead of the full paragraph, to leave room for the photo grid.
+- Gallery header description shows in full. The header has `max-height: 45vh; overflow-y: auto` so it scrolls internally if the text is very long, always leaving room for the photo grid below.
 
 ## What adapts below 520 px (small phones)
 
@@ -304,7 +304,7 @@ All interactive elements (nav links, filter buttons, dot navigation, gallery thu
 | Problem | Cause | Fix applied |
 |---------|-------|-------------|
 | Hero slideshow didn't fill the full viewport height | `100svh` not always computed correctly in Safari iOS | Changed to `height: 100vh; height: 100dvh` (dvh = dynamic viewport height, adjusts as browser chrome shows/hides) |
-| Gallery description invisible on mobile | `display: none` was set explicitly at ≤860 px | Replaced with 3-line clamp so the description is visible but compact |
+| Gallery description invisible on mobile | `display: none` was set explicitly at ≤860 px | Full text now visible; header has `max-height: 45vh; overflow-y: auto` so it scrolls if text is long |
 | Gallery photo grid overlapped instead of scrolling | Safari doesn't scroll a `display:grid` element that is also the `overflow-y:auto` flex child | Wrapped grid in a separate `.gal-grid-scroll` div (scroll container) so the grid itself can grow freely |
 
 ## Testing checklist
