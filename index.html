@@ -1258,6 +1258,7 @@
         item_rome_naples:'Rome &amp; Naples', item_japan:'Japan', item_kenya:'Kenya',
         item_morocco:'Morocco', item_birds:'Birds', item_flowers:'Flowers',
         item_mammals:'Mammals', item_slow_motion:'Slow Motion', item_dance:'Dance',
+        item_faroe_islands:'Faroe Islands',
         cal_label:'Archive', cal_title:'By Year', cal_view:'View gallery',
         bio_label:'About', bio_title:'Biography',
         bio_p1:'Francisco Cornellana is a travel and wildlife photographer originally from Andorra, based in the UK, with over a decade of work spanning six continents and some of the planet\'s most extraordinary landscapes.',
@@ -1301,6 +1302,7 @@
         item_rome_naples:'Roma i Nàpols', item_japan:'Japó', item_kenya:'Kenya',
         item_morocco:'Marroc', item_birds:'Ocells', item_flowers:'Flors',
         item_mammals:'Mamífers', item_slow_motion:'Càmera Lenta', item_dance:'Dansa',
+        item_faroe_islands:'Illes Fèroe',
         cal_label:'Arxiu', cal_title:'Per Any', cal_view:'Veure galeria',
         bio_label:'Sobre', bio_title:'Biografia',
         bio_p1:'Francisco Cornellana és un fotògraf de viatges i natura originari d\'Andorra, establert al Regne Unit, amb més d\'una dècada de trajectòria que abraça sis continents i alguns dels paisatges més extraordinaris del planeta.',
@@ -1344,6 +1346,7 @@
         item_rome_naples:'Roma y Nápoles', item_japan:'Japón', item_kenya:'Kenia',
         item_morocco:'Marruecos', item_birds:'Aves', item_flowers:'Flores',
         item_mammals:'Mamíferos', item_slow_motion:'Cámara Lenta', item_dance:'Danza',
+        item_faroe_islands:'Islas Feroe',
         cal_label:'Archivo', cal_title:'Por Año', cal_view:'Ver galería',
         bio_label:'Sobre mí', bio_title:'Biografía',
         bio_p1:'Francisco Cornellana es un fotógrafo de viajes y naturaleza originario de Andorra, afincado en el Reino Unido, con más de una década de trabajo que abarca seis continentes y algunos de los paisajes más extraordinarios del planeta.',
@@ -1558,6 +1561,12 @@
           ca:'El rodeo americà és un dels esdeveniments esportius i culturals més fotogènicament intensos dels Estats Units. La pols de l\'arena, la tensió dels llaçadors i la força explosiva dels braus combinen per crear un espectacle visual d\'una energia primordial. Fotografiar un rodeo exigeix velocitats d\'obturador extremes, una lectura ràpida de l\'acció i un posicionament que permeti capturar les expressions dels participants. L\'escenari nocturn, amb la llum artificial de l\'estadi, amplifica el dramatisme de les imatges.',
           es:'El rodeo americano es uno de los eventos deportivos y culturales más fotogénicamente intensos de Estados Unidos. El polvo de la arena, la tensión de los lariseros y la fuerza explosiva de los toros combinan para crear un espectáculo visual de una energía primordial. Fotografiar un rodeo exige velocidades de obturación extremas, una lectura rápida de la acción y un posicionamiento que permita capturar las expresiones de los participantes. El escenario nocturno, con la luz artificial del estadio, amplifica el dramatismo de las imágenes.'
         }},
+      'islas-feroes': { name:'Faroe Islands', cat:'Europe', catKey:'europe', count:231, link:'https://en.wikipedia.org/wiki/Faroe_Islands',
+        desc:{
+          en:'The Faroe Islands are an autonomous archipelago of 18 islands rising from the North Atlantic, midway between Norway, Iceland and Scotland. Remote, often shrouded in Atlantic mist and prone to sudden weather shifts within the same hour, these islands offer a rare photographic environment: saturated green cliffs plunging into steel-grey sea, turf-roofed villages clinging to near-vertical hillsides, and skies that can move from flat overcast to dramatic shafts of golden light in minutes. The island of Vágar\'s Sørvágsvatn lake appears to float above the ocean — an optical illusion born of altitude and perspective. Puffins nest in their tens of thousands on the sea cliffs each summer, indifferent to the wind and fog that make photography both demanding and extraordinary.',
+          ca:'Les Illes Fèroe són un arxipèlag autònom de 18 illes que emergeixen de l\'Atlàntic Nord, a mig camí entre Noruega, Islàndia i Escòcia. Remotes, sovint embolicades en boira atlàntica i propenses als canvis sobtats de temps, aquestes illes ofereixen un entorn fotogràfic inusual: penya-segats de color verd intens que s\'enfonsen en una mar grisa d\'acer, pobles de cases amb teulades de gespa arrapats a vessants quasi verticals, i cels que poden passar d\'un cober pla a raigs daurats en minuts. El llac Sørvágsvatn, a l\'illa de Vágar, sembla flotar per sobre de l\'oceà — una il·lusió òptica nascuda de l\'altitud i la perspectiva. Els frares de mar nidifiquen en desenes de milers a les cingleres cada estiu, indiferents al vent i la boira.',
+          es:'Las Islas Feroe son un archipiélago autónomo de 18 islas que emergen del Atlántico Norte, a medio camino entre Noruega, Islandia y Escocia. Remotas, a menudo envueltas en niebla atlántica y propensas a los cambios de tiempo repentinos, estas islas ofrecen un entorno fotográfico singular: acantilados de color verde intenso que se precipitan hacia un mar gris acerado, pueblos de casas con tejados de turba aferrados a laderas casi verticales, y cielos que pueden pasar de un gris plano a rayos de luz dorada en minutos. El lago Sørvágsvatn, en la isla de Vágar, parece flotar sobre el océano — una ilusión óptica nacida de la altitud y la perspectiva. Los frailecillos anidan por decenas de miles en los acantilados cada verano, indiferentes al viento y la niebla.'
+        }},
     };
 
     /* ── Gallery UI metadata (filter, remote cover, page URL, optional nameKey) ──
@@ -1592,6 +1601,7 @@
       'slow-motion':      { filter:'naturaleza', cover:'7R39766-scaled-1.jpg',                     page:2973, nameKey:'item_slow_motion' },
       'danza':            { filter:'eventos',    cover:'Sony-a7rIV4155-SM-scaled-1.jpg',           page:3874, nameKey:'item_dance' },
       'rodeo':            { filter:'eventos',    cover:'Rodeo-ON1-_7R31709-scaled-1.jpg',          page:2967 },
+      'islas-feroes':     { filter:'europa',     cover:'',                                          page:null, nameKey:'item_faroe_islands' },
     };
 
     /* Builds the portfolio grid from GALLERY_META + GALLERY_UI.
