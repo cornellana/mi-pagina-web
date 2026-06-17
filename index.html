@@ -524,7 +524,7 @@
     #contact { background: var(--black); }
     .contact-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1.6fr;
       gap: 6rem;
       margin-bottom: 6rem;
     }
@@ -537,35 +537,63 @@
       transition: color 0.2s;
     }
     .contact-links a:hover { color: var(--gold); }
-    .social-col h3 {
+    /* Contact form */
+    .contact-form-col h3 {
       font-family: 'Playfair Display', serif;
       font-weight: 400;
       font-size: 1.4rem;
       margin-bottom: 2rem;
     }
-    .social-list { display: flex; flex-direction: column; gap: 1rem; }
-    .social-list a {
-      font-size: 0.72rem;
-      letter-spacing: 0.18em;
+    .form-field { margin-bottom: 1.3rem; }
+    .form-field label {
+      display: block;
+      font-size: 0.65rem;
+      letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--muted);
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.8rem;
-      transition: color 0.2s;
+      margin-bottom: 0.45rem;
     }
-    .social-list a::before {
-      content: '';
-      display: block;
-      width: 20px;
-      height: 1px;
-      background: currentColor;
-      flex-shrink: 0;
-      transition: width 0.3s;
+    .form-field input,
+    .form-field textarea {
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--card);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.75rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      -webkit-appearance: none;
+      appearance: none;
     }
-    .social-list a:hover { color: var(--text); }
-    .social-list a:hover::before { width: 40px; }
+    .form-field input:focus,
+    .form-field textarea:focus { border-color: var(--gold); }
+    .form-field textarea { resize: vertical; min-height: 110px; }
+    .form-send {
+      background: none;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Inter', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      padding: 0.85rem 2.5rem;
+      cursor: pointer;
+      transition: background 0.25s, color 0.25s;
+      margin-top: 0.4rem;
+    }
+    .form-send:hover { background: var(--gold); color: var(--black); }
+    .form-sent {
+      font-size: 0.85rem;
+      color: var(--gold);
+      letter-spacing: 0.05em;
+      margin-top: 1rem;
+      display: none;
+    }
 
     footer {
       padding-top: 3rem;
@@ -931,7 +959,7 @@
       <h2 class="section-title" data-i18n="bio_title">Biography</h2>
       <div class="rule"></div>
       <br>
-      <p data-i18n="bio_p1">Francisco Cornellana is a travel and wildlife photographer based in the UK, with over a decade of work spanning six continents and some of the world's most extraordinary landscapes.</p>
+      <p data-i18n="bio_p1">Francisco Cornellana is a travel and wildlife photographer originally from Andorra, based in the UK, with over a decade of work spanning six continents and some of the planet's most extraordinary landscapes.</p>
       <p data-i18n="bio_p2">His images have taken him from the glaciated fjords of Alaska and the volcanic shores of Hawaii to the Arctic archipelago of Lofoten, the savannahs of Kenya and the granite towers of Patagonia. Whether tracking predators on the Masai Mara, shooting long exposures on a Norwegian coastline at 2 a.m., or documenting the culture and architecture of Morocco's ancient medinas, Francisco brings the same methodical eye and technical precision to every subject.</p>
       <p data-i18n="bio_p3">His specialty disciplines — aerial photography with DJI systems, macro photography, and long-exposure slow-motion work — complement a broader body of travel and landscape work that spans every major photographic environment: desert, arctic, jungle, ocean, mountain and urban.</p>
       <p data-i18n="bio_p4">Francisco works with the Sony Alpha system, including the 61-megapixel Sony A7R IV and the Sony A1, paired with a full suite of Sony G Master lenses. His work has been exhibited privately and is available for editorial, commercial and personal licensing.</p>
@@ -997,18 +1025,29 @@
         <h2 class="section-title" data-i18n="cont_title">Contact</h2>
         <div class="rule" style="margin-bottom:2.5rem;"></div>
         <div class="contact-links">
-          <a href="tel:+446417540072">+44 641 754 0072</a>
+          <a href="tel:+376366129">+376 366 129</a>
           <a href="mailto:cornellana@mac.com">cornellana@mac.com</a>
+          <a href="https://instagram.com/fcornellana" target="_blank" rel="noopener">@fcornellana</a>
         </div>
       </div>
-      <div class="social-col reveal">
-        <h3 data-i18n="cont_social">Social Media</h3>
-        <div class="social-list">
-          <a href="https://instagram.com" target="_blank" rel="noopener">Instagram</a>
-          <a href="https://twitter.com"   target="_blank" rel="noopener">Twitter / X</a>
-          <a href="https://flickr.com"    target="_blank" rel="noopener">Flickr</a>
-          <a href="https://500px.com"     target="_blank" rel="noopener">500px</a>
-        </div>
+      <div class="contact-form-col reveal">
+        <h3 data-i18n="cont_form_title">Send a message</h3>
+        <form id="contactForm" onsubmit="handleContactForm(event)">
+          <div class="form-field">
+            <label for="cf-name" data-i18n="cont_form_name">Name</label>
+            <input type="text" id="cf-name" name="name" required autocomplete="name">
+          </div>
+          <div class="form-field">
+            <label for="cf-email" data-i18n="cont_form_email">Email</label>
+            <input type="email" id="cf-email" name="email" required autocomplete="email">
+          </div>
+          <div class="form-field">
+            <label for="cf-msg" data-i18n="cont_form_msg">Message</label>
+            <textarea id="cf-msg" name="message" rows="5" required></textarea>
+          </div>
+          <button type="submit" class="form-send" data-i18n="cont_form_send">Send</button>
+          <p class="form-sent" id="formSent" data-i18n="cont_form_ok">Message ready — your mail app will open.</p>
+        </form>
       </div>
     </div>
     <footer>
@@ -1208,7 +1247,7 @@
         item_mammals:'Mammals', item_slow_motion:'Slow Motion', item_dance:'Dance',
         cal_label:'Archive', cal_title:'By Year', cal_view:'View gallery',
         bio_label:'About', bio_title:'Biography',
-        bio_p1:'Francisco Cornellana is a travel and wildlife photographer based in the UK, with over a decade of work spanning six continents and some of the planet\'s most extraordinary landscapes.',
+        bio_p1:'Francisco Cornellana is a travel and wildlife photographer originally from Andorra, based in the UK, with over a decade of work spanning six continents and some of the planet\'s most extraordinary landscapes.',
         bio_p2:'His images have taken him from the glaciated fjords of Alaska and the volcanic coastlines of Hawaii to the Arctic archipelago of the Lofoten Islands, the savannahs of Kenya and the granite towers of Patagonia. Whether tracking predators on the Masai Mara, shooting long exposures on a Norwegian coast at 2 a.m., or documenting the culture and architecture of Morocco\'s ancient medinas, Francisco brings the same methodical eye and technical precision to every subject.',
         bio_p3:'His specialty disciplines — aerial photography with DJI systems, macro work, and long-exposure slow-motion photography — complement a broader body of travel and landscape work that spans every major photographic environment: desert, arctic, jungle, ocean, mountain and urban.',
         bio_p4:'Francisco works with the Sony Alpha system, including the 61-megapixel Sony A7R IV and the Sony A1, paired with a full range of Sony G Master lenses. His work has been exhibited privately and is available for editorial, commercial and personal licensing.',
@@ -1224,7 +1263,11 @@
         lic_personal_t:'Personal Use', lic_personal_d:'Permitted for non-commercial personal or educational use, always with correct attribution to the author.',
         lic_editorial_t:'Editorial Use', lic_editorial_d:'Requires prior agreement. Please get in touch to request a specific editorial licence.',
         lic_commercial_t:'Commercial Use', lic_commercial_d:'Available on request. Terms and scope are defined on a case-by-case basis.',
-        cont_label:'Get in touch', cont_title:'Contact', cont_social:'Social Media',
+        cont_label:'Get in touch', cont_title:'Contact',
+        cont_form_title:'Send a message',
+        cont_form_name:'Name', cont_form_email:'Email',
+        cont_form_msg:'Message', cont_form_send:'Send',
+        cont_form_ok:'Message ready — your mail app will open.',
         footer_copy:'© 2026 Francisco Cornellana. All rights reserved.',
         gal_learn:'Learn more',
       },
@@ -1247,7 +1290,7 @@
         item_mammals:'Mamífers', item_slow_motion:'Càmera Lenta', item_dance:'Dansa',
         cal_label:'Arxiu', cal_title:'Per Any', cal_view:'Veure galeria',
         bio_label:'Sobre', bio_title:'Biografia',
-        bio_p1:'Francisco Cornellana és un fotògraf de viatges i natura basat al Regne Unit, amb més d\'una dècada de trajectòria que abraça sis continents i alguns dels paisatges més extraordinaris del planeta.',
+        bio_p1:'Francisco Cornellana és un fotògraf de viatges i natura originari d\'Andorra, establert al Regne Unit, amb més d\'una dècada de trajectòria que abraça sis continents i alguns dels paisatges més extraordinaris del planeta.',
         bio_p2:'Les seves imatges l\'han portat des dels fords glaciats d\'Alaska i les costes volcàniques d\'Hawaii fins a l\'arxipèlag àrtic de les Lofoten, les sabanes de Kenya i les torres de granit de la Patagònia. Tant si segueix depredadors al Masai Mara, captura llargues exposicions en una costa noruega a les 2 de la matinada o documenta la cultura i l\'arquitectura de les antigues medines del Marroc, Francisco aporta la mateixa mirada metòdica i precisió tècnica a cada tema.',
         bio_p3:'Les seves especialitats —la fotografia aèria amb sistemes DJI, la macrofotografia i el treball de llarga exposició en càmera lenta— complementen un corpus més ampli de fotografia de viatges i paisatge que abasta tots els entorns fotogràfics principals: desert, àrtic, selva, oceà, muntanya i urbà.',
         bio_p4:'Francisco treballa amb el sistema Sony Alpha, inclosos el Sony A7R IV de 61 megapíxels i el Sony A1, acompanyats d\'una completa gamma d\'objectius Sony G Master. La seva obra ha estat exposada en privat i està disponible per a llicències editorials, comercials i personals.',
@@ -1263,7 +1306,11 @@
         lic_personal_t:'Ús Personal', lic_personal_d:'Permès per a ús personal no comercial o educatiu, sempre amb l\'atribució correcta a l\'autor.',
         lic_editorial_t:'Ús Editorial', lic_editorial_d:'Requereix acord previ. Poseu-vos en contacte per sol·licitar una llicència editorial específica.',
         lic_commercial_t:'Ús Comercial', lic_commercial_d:'Disponible a petició. Les condicions i l\'abast es defineixen cas per cas.',
-        cont_label:'Contacta', cont_title:'Contacte', cont_social:'Xarxes Socials',
+        cont_label:'Contacta', cont_title:'Contacte',
+        cont_form_title:'Envia un missatge',
+        cont_form_name:'Nom', cont_form_email:'Correu electrònic',
+        cont_form_msg:'Missatge', cont_form_send:'Enviar',
+        cont_form_ok:'Missatge llest — s\'obrirà el teu gestor de correu.',
         footer_copy:'© 2026 Francisco Cornellana. Tots els drets reservats.',
         gal_learn:'Aprèn més',
       },
@@ -1286,7 +1333,7 @@
         item_mammals:'Mamíferos', item_slow_motion:'Cámara Lenta', item_dance:'Danza',
         cal_label:'Archivo', cal_title:'Por Año', cal_view:'Ver galería',
         bio_label:'Sobre mí', bio_title:'Biografía',
-        bio_p1:'Francisco Cornellana es un fotógrafo de viajes y naturaleza afincado en el Reino Unido, con más de una década de trabajo que abarca seis continentes y algunos de los paisajes más extraordinarios del planeta.',
+        bio_p1:'Francisco Cornellana es un fotógrafo de viajes y naturaleza originario de Andorra, afincado en el Reino Unido, con más de una década de trabajo que abarca seis continentes y algunos de los paisajes más extraordinarios del planeta.',
         bio_p2:'Sus imágenes le han llevado desde los fiordos glaciados de Alaska y las costas volcánicas de Hawái hasta el archipiélago ártico de las Lofoten, las sabanas de Kenia y las torres de granito de la Patagonia. Ya sea siguiendo depredadores en el Masai Mara, realizando largas exposiciones en la costa noruega a las 2 de la madrugada o documentando la cultura y arquitectura de las antiguas medinas de Marruecos, Francisco aporta la misma mirada metódica y precisión técnica a cada tema.',
         bio_p3:'Sus especialidades —la fotografía aérea con sistemas DJI, la macrofotografía y el trabajo de larga exposición a cámara lenta— complementan un corpus más amplio de fotografía de viajes y paisaje que abarca todos los entornos fotográficos principales: desierto, ártico, selva, océano, montaña y urbano.',
         bio_p4:'Francisco trabaja con el sistema Sony Alpha, incluidos el Sony A7R IV de 61 megapíxeles y el Sony A1, acompañados de una completa gama de objetivos Sony G Master. Su obra ha sido expuesta de forma privada y está disponible bajo licencias editoriales, comerciales y personales.',
@@ -1302,7 +1349,11 @@
         lic_personal_t:'Uso Personal', lic_personal_d:'Permitido para uso personal no comercial o educativo, siempre con la atribución correcta al autor.',
         lic_editorial_t:'Uso Editorial', lic_editorial_d:'Requiere acuerdo previo. Póngase en contacto para solicitar una licencia editorial específica.',
         lic_commercial_t:'Uso Comercial', lic_commercial_d:'Disponible bajo petición. Los términos y el alcance se definen caso por caso.',
-        cont_label:'Contacto', cont_title:'Contacto', cont_social:'Redes Sociales',
+        cont_label:'Contacto', cont_title:'Contacto',
+        cont_form_title:'Enviar un mensaje',
+        cont_form_name:'Nombre', cont_form_email:'Correo electrónico',
+        cont_form_msg:'Mensaje', cont_form_send:'Enviar',
+        cont_form_ok:'Mensaje listo — se abrirá tu cliente de correo.',
         footer_copy:'© 2026 Francisco Cornellana. Todos los derechos reservados.',
         gal_learn:'Más información',
       },
@@ -1763,6 +1814,20 @@
       const dy = e.changedTouches[0].clientY - galTouchY;
       if (dy > 80 && e.target === galModal) closeGallery();
     }, { passive: true });
+
+    /* Contact form — composes a mailto: link and opens the mail client */
+    function handleContactForm(e) {
+      e.preventDefault();
+      const name    = document.getElementById('cf-name').value.trim();
+      const email   = document.getElementById('cf-email').value.trim();
+      const message = document.getElementById('cf-msg').value.trim();
+      const subject = encodeURIComponent('Portfolio enquiry — ' + name);
+      const body    = encodeURIComponent('From: ' + name + ' <' + email + '>\n\n' + message);
+      window.location.href = 'mailto:cornellana@mac.com?subject=' + subject + '&body=' + body;
+      const sent = document.getElementById('formSent');
+      sent.style.display = 'block';
+      setTimeout(() => { sent.style.display = 'none'; }, 5000);
+    }
 
     /* Build portfolio grid from GALLERY_META, then apply language */
     buildPortfolioGrid();
