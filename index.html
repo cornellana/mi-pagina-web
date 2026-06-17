@@ -161,7 +161,8 @@
 
     /* ─── Hero ───────────────────────────────────────────────────── */
     #home {
-      height: 100svh;
+      height: 100vh;
+      height: 100dvh;
       min-height: 620px;
       position: relative;
       display: flex;
@@ -853,7 +854,15 @@
       footer { flex-direction: column; gap: 1rem; text-align: center; }
 
       .gal-header { padding: 1.2rem 1.2rem; }
-      .gal-header-desc { display: none; }
+      .gal-header-desc {
+        font-size: 0.82rem;
+        line-height: 1.6;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
       .gal-grid { grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); padding: 0.8rem; }
 
       .lb-img { max-width: calc(100vw - 20px); max-height: calc(100vh - 120px); }
