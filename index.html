@@ -69,15 +69,15 @@
       list-style: none;
     }
     .nav-links a {
-      color: rgba(230,230,230,0.75);
+      color: #fff;
       text-decoration: none;
       font-size: 0.71rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       transition: color 0.2s;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.9), 0 0px 2px rgba(0,0,0,0.6);
     }
-    .nav-links a:hover { color: #fff; }
+    .nav-links a:hover { color: var(--gold); }
     nav.scrolled .nav-links a { text-shadow: none; color: var(--muted); }
     nav.scrolled .nav-links a:hover { color: var(--text); }
 
@@ -139,7 +139,8 @@
 
     @media (max-width: 860px) {
       nav { padding: 1rem 1.5rem; }
-      .hamburger { display: flex; }
+      .nav-logo { position: relative; z-index: 10; }
+      .hamburger { display: flex; position: relative; z-index: 10; }
       .nav-links {
         position: fixed;
         inset: 0;
@@ -149,6 +150,7 @@
         align-items: center;
         gap: 2.5rem;
         display: none;
+        z-index: 5;
       }
       .nav-links.open { display: flex; }
       .nav-links a { font-size: 0.9rem; text-shadow: none; color: var(--muted); }
@@ -288,14 +290,16 @@
       line-height: 1.03;
       letter-spacing: -0.025em;
       margin-bottom: 1.6rem;
+      text-shadow: 0 2px 12px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.5);
     }
     .hero-title em { font-style: italic; color: var(--gold); }
 
     .hero-sub {
       font-size: 1.2rem;
-      color: rgba(230,230,230,0.75);
+      color: #fff;
       max-width: 480px;
       line-height: 1.8;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.8), 0 1px 3px rgba(0,0,0,0.5);
     }
 
     /* ─── Sections ───────────────────────────────────────────────── */
@@ -838,14 +842,14 @@
         gap: 3rem;
         padding: 5rem 1.5rem;
       }
-      .bio-photo { aspect-ratio: 16/9; order: -1; }
+      .bio-photo { aspect-ratio: 3/4; order: -1; }
 
       #gear {
         grid-template-columns: 1fr;
         gap: 3rem;
         padding: 5rem 1.5rem;
       }
-      .gear-photo { aspect-ratio: 16/9; position: static; }
+      .gear-photo { aspect-ratio: 4/3; position: static; background-position: center center; }
 
       .year-row { grid-template-columns: 1fr; }
       .year-card { aspect-ratio: 16/7; }
@@ -1227,9 +1231,8 @@
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
     /* ── Gallery data ──────────────────────────────────────────── */
-    const LOCAL_BASE = '../../Pictures/Portfolio/';
-    const WP = 'https://cornellana.online/wp-content/uploads/2024/03/';
-    const isLocal = location.protocol === 'file:';
+    const LOCAL_BASE = 'Pictures/Portfolio/';
+    const isLocal = true;
 
     /* Remote image URLs — used on GitHub Pages / iPhone / any non-file:// context */
     const GALLERY_IMAGES = {
@@ -1283,7 +1286,7 @@
         item_rome_naples:'Rome &amp; Naples', item_japan:'Japan', item_kenya:'Kenya',
         item_morocco:'Morocco', item_birds:'Birds', item_flowers:'Flowers',
         item_mammals:'Mammals', item_slow_motion:'Slow Motion', item_dance:'Dance',
-        item_iceland:'Iceland', item_faroe_islands:'Faroe Islands',
+        item_iceland:'Iceland', item_faroe_islands:'Faroe Islands', item_cruise_netherlands:'Netherlands Cruise',
         cal_label:'Archive', cal_title:'By Year', cal_view:'View gallery',
         bio_label:'About', bio_title:'Biography',
         bio_p1:'Francisco Cornellana is a travel and wildlife photographer originally from Andorra, based in the UK, with over a decade of work spanning six continents and some of the planet\'s most extraordinary landscapes.',
@@ -1327,7 +1330,7 @@
         item_rome_naples:'Roma i Nàpols', item_japan:'Japó', item_kenya:'Kenya',
         item_morocco:'Marroc', item_birds:'Ocells', item_flowers:'Flors',
         item_mammals:'Mamífers', item_slow_motion:'Càmera Lenta', item_dance:'Dansa',
-        item_iceland:'Islàndia', item_faroe_islands:'Illes Fèroe',
+        item_iceland:'Islàndia', item_faroe_islands:'Illes Fèroe', item_cruise_netherlands:'Creuer Països Baixos',
         cal_label:'Arxiu', cal_title:'Per Any', cal_view:'Veure galeria',
         bio_label:'Sobre', bio_title:'Biografia',
         bio_p1:'Francisco Cornellana és un fotògraf de viatges i natura originari d\'Andorra, establert al Regne Unit, amb més d\'una dècada de trajectòria que abraça sis continents i alguns dels paisatges més extraordinaris del planeta.',
@@ -1371,7 +1374,7 @@
         item_rome_naples:'Roma y Nápoles', item_japan:'Japón', item_kenya:'Kenia',
         item_morocco:'Marruecos', item_birds:'Aves', item_flowers:'Flores',
         item_mammals:'Mamíferos', item_slow_motion:'Cámara Lenta', item_dance:'Danza',
-        item_iceland:'Islandia', item_faroe_islands:'Islas Feroe',
+        item_iceland:'Islandia', item_faroe_islands:'Islas Feroe', item_cruise_netherlands:'Crucero Países Bajos',
         cal_label:'Archivo', cal_title:'Por Año', cal_view:'Ver galería',
         bio_label:'Sobre mí', bio_title:'Biografía',
         bio_p1:'Francisco Cornellana es un fotógrafo de viajes y naturaleza originario de Andorra, afincado en el Reino Unido, con más de una década de trabajo que abarca seis continentes y algunos de los paisajes más extraordinarios del planeta.',
@@ -1511,13 +1514,13 @@
       'andorra': { name:'Andorra', cat:'Europe', catKey:'europe', count:20, link:'https://en.wikipedia.org/wiki/Andorra',
         desc:{
           en:'Wedged between France and Spain high in the eastern Pyrenees, the tiny principality of Andorra packs extraordinary landscape variety into its 468 km². The Madriu-Perafita-Claror Valley — a UNESCO World Heritage Site — preserves a near-pristine glacial landscape of high-altitude lakes, cirques, and ancient transhumance paths. In summer, meadows explode with wildflowers; in autumn, the deciduous forests turn every shade of amber and rust; in winter, the peaks hold some of the best skiing in the Pyrenees. A landscape that rewards slow, attentive photography at every season.',
-          ca:'Andorra és un microestat de muntanya entre França i Espanya que ofereix uns paisatges pirinencs de gran bellesa fotogràfica, sovint infrarepresentats. Els pics que superen els 2.900 metres, els llacs glacials d\'alta muntanya i les carenes que separen les aigues del Mediterrani i l\'Atlàntic componen un mosaic visual molt variat. A la tardor, quan els boscos es tenyeixen de roig, ataronjat i daurat, el paisatge assoleix el seu punt àlgid fotogràfic. La mida reduïda del país permet accedir a escenaris molt diversos en el transcurs d\'un sol dia.',
+          ca:'Andorra és un microestat de muntanya entre França i Espanya que ofereix uns paisatges pirinencs de gran bellesa fotogràfica, sovint infrarepresentats. Els pics que superen els 2.900 metres, els llacs glacials d\'alta muntanya i les carenes que separen les aigues del Mediterrani i l\'Atlàntic composen un mosaic visual molt variat. A la tardor, quan els boscos es tenyeixen de roig, ataronjat i daurat, el paisatge assoleix el seu punt àlgid fotogràfic. La mida reduïda del país permet accedir a escenaris molt diversos en el transcurs d\'un sol dia.',
           es:'Andorra es un microestado de montaña entre Francia y España que ofrece unos paisajes pirenaicos de gran belleza fotográfica, a menudo infrarrepresentados. Los picos que superan los 2.900 metros, los lagos glaciales de alta montaña y las crestas que separan las aguas del Mediterráneo y el Atlántico componen un mosaico visual muy variado. En otoño, cuando los bosques se tiñen de rojo, naranja y dorado, el paisaje alcanza su punto álgido fotográfico. El reducido tamaño del país permite acceder a escenarios muy diversos en el transcurso de un solo día.'
         }},
       'japon': { name:'Japan', cat:'Asia', catKey:'asia', count:20, link:'https://en.wikipedia.org/wiki/Japan',
         desc:{
           en:'Japan is a country of extraordinary visual contrasts that somehow coexist in perfect harmony. Ancient Shinto shrines and Zen gardens sit minutes from the neon pulse of Shinjuku and Akihabara. The ephemeral beauty of cherry blossom season — sakura in full bloom for barely two weeks each spring — stops the entire nation and draws photographers from around the world. Arashiyama\'s bamboo groves create a cathedral of green that filters light into something almost sacred. Osaka\'s Dotonbori district blazes with electric color after dark. Japan is not one place but dozens, each as visually rich as the last.',
-          ca:'El Japó és una paradoxa visual: un país d\'una modernitat aclaparadora que ha preservat una estètica tradicional de singular refinament. La llum de l\'alba sobre els temples de Kyoto, els barris de neó de Shinjuku a la nit, els jardins zen nevats i les geixes que travessen carrers empedrats de Gion componen un univers fotogràfic inacabable. La primavera dels cirerers —el hanami— transforma els parcs en explosions de rosa suau que duren tan sols dues setmanes. Osaka afegeix la seva versió pròpia i radicalment diferent de la vida urbana japonesa.',
+          ca:'El Japó és una paradoxa visual: un país d\'una modernitat aclaparadora que ha preservat una estètica tradicional de singular refinament. La llum de l\'alba sobre els temples de Kyoto, els barris de neó de Shinjuku a la nit, els jardins zen nevats i les geixes que travessen carrers empedrats de Gion composen un univers fotogràfic inacabable. La primavera dels cirerers —el hanami— transforma els parcs en explosions de rosa suau que duren tan sols dues setmanes. Osaka afegeix la seva versió pròpia i radicalment diferent de la vida urbana japonesa.',
           es:'Japón es una paradoja visual: un país de una modernidad abrumadora que ha preservado una estética tradicional de singular refinamiento. La luz del alba sobre los templos de Kioto, los barrios de neón de Shinjuku de noche, los jardines zen nevados y las geishas que atraviesan las calles empedradas de Gion componen un universo fotográfico inacabable. La primavera de los cerezos —el hanami— transforma los parques en explosiones de rosa suave que duran tan solo dos semanas. Osaka añade su propia versión, radicalmente diferente, de la vida urbana japonesa.'
         }},
       'kenia': { name:'Kenya', cat:'Africa', catKey:'africa', count:20, link:'https://en.wikipedia.org/wiki/Maasai_Mara',
@@ -1598,6 +1601,12 @@
           ca:'Les Illes Fèroe són un arxipèlag autònom de 18 illes que emergeixen de l\'Atlàntic Nord, a mig camí entre Noruega, Islàndia i Escòcia. Remotes, sovint embolicades en boira atlàntica i propenses als canvis sobtats de temps, aquestes illes ofereixen un entorn fotogràfic inusual: penya-segats de color verd intens que s\'enfonsen en una mar grisa d\'acer, pobles de cases amb teulades de gespa arrapats a vessants quasi verticals, i cels que poden passar d\'un cober pla a raigs daurats en minuts. El llac Sørvágsvatn, a l\'illa de Vágar, sembla flotar per sobre de l\'oceà — una il·lusió òptica nascuda de l\'altitud i la perspectiva. Els frares de mar nidifiquen en desenes de milers a les cingleres cada estiu, indiferents al vent i la boira.',
           es:'Las Islas Feroe son un archipiélago autónomo de 18 islas que emergen del Atlántico Norte, a medio camino entre Noruega, Islandia y Escocia. Remotas, a menudo envueltas en niebla atlántica y propensas a los cambios de tiempo repentinos, estas islas ofrecen un entorno fotográfico singular: acantilados de color verde intenso que se precipitan hacia un mar gris acerado, pueblos de casas con tejados de turba aferrados a laderas casi verticales, y cielos que pueden pasar de un gris plano a rayos de luz dorada en minutos. El lago Sørvágsvatn, en la isla de Vágar, parece flotar sobre el océano — una ilusión óptica nacida de la altitud y la perspectiva. Los frailecillos anidan por decenas de miles en los acantilados cada verano, indiferentes al viento y la niebla.'
         }},
+      'crucero-paises-bajos': { name:'Crucero Países Bajos', cat:'Europe', catKey:'europe', count:59, link:'https://en.wikipedia.org/wiki/Netherlands',
+        desc:{
+          en:'A cruise through the Netherlands in early spring — when the tulip fields are just beginning to blaze with colour and the centuries-old canal cities still belong more to light and reflection than to summer crowds. Amsterdam, Kinderdijk, Hoorn and the quieter inland waterways offered an ever-changing interplay of Dutch Golden Age architecture, windmills, flat light over polders, and the sharp geometry of bicycles and bridges. Photographed across five days in April 2025 aboard a river cruise, these images chase the particular quality of northern European spring light: soft, diffuse and endlessly flattering to water and stone.',
+          ca:'Un creuer pels Països Baixos a principis de primavera — quan els camps de tulipes comencen a encendre\'s de color i les ciutats de canals centenàries pertanyen encara més a la llum i al reflex que a les multituds estivals. Amsterdam, Kinderdijk, Hoorn i les vies fluvials més tranquil·les van oferir un joc canviant d\'arquitectura del Segle d\'Or holandès, molins de vent, llum plana sobre els pòlders i la geometria nítida de bicicletes i ponts. Fotografiat al llarg de cinc dies de l\'abril del 2025 a bord d\'un creuer fluvial, aquestes imatges persegueixen la qualitat particular de la llum de primavera del nord d\'Europa: suau, difusa i infinitament afavoridora per a l\'aigua i la pedra.',
+          es:'Un crucero por los Países Bajos a principios de primavera — cuando los campos de tulipanes empiezan a arder de color y las ciudades de canales centenarias pertenecen todavía más a la luz y al reflejo que a las multitudes estivales. Ámsterdam, Kinderdijk, Hoorn y las vías fluviales más tranquilas ofrecieron un juego cambiante de arquitectura del Siglo de Oro holandés, molinos de viento, luz plana sobre los pólderes y la geometría nítida de bicicletas y puentes. Fotografiado a lo largo de cinco días de abril de 2025 a bordo de un crucero fluvial, estas imágenes persiguen la calidad particular de la luz de primavera del norte de Europa: suave, difusa e infinitamente favorecedora para el agua y la piedra.'
+        }},
     };
 
     /* ── Gallery UI metadata (filter, remote cover, page URL, optional nameKey) ──
@@ -1634,6 +1643,7 @@
       'rodeo':            { filter:'eventos',    cover:'Rodeo-ON1-_7R31709-scaled-1.jpg',          page:2967 },
       'islandia':         { filter:'europa',     cover:'',                                          page:null, nameKey:'item_iceland' },
       'islas-feroes':     { filter:'europa',     cover:'',                                          page:null, nameKey:'item_faroe_islands' },
+      'crucero-paises-bajos': { filter:'europa', cover:'', page:null, nameKey:'item_cruise_netherlands' },
     };
 
     /* ── Per-photo location data derived from EXIF GPS coordinates ── */
@@ -1677,6 +1687,36 @@
         '41':'Námafjall — Hverir, Mývatn', '42':'Námafjall — Hverir, Mývatn',
         '43':'Námafjall — Hverir, Mývatn', '44':'Námafjall — Hverir, Mývatn',
         '45':'Námafjall — Hverir, Mývatn', '46':'Goðafoss'
+      },
+      'crucero-paises-bajos': {
+        '01':'Jordaan, Ámsterdam',        '02':'Jordaan, Ámsterdam',
+        '03':'Grachtengordel, Ámsterdam', '04':'Grachtengordel, Ámsterdam',
+        '05':'Grachtengordel, Ámsterdam', '06':'Grachtengordel, Ámsterdam',
+        '07':'Grachtengordel, Ámsterdam', '08':'Grachtengordel, Ámsterdam',
+        '09':'Grachtengordel, Ámsterdam', '10':'Museumkwartier, Ámsterdam',
+        '11':'Museumkwartier, Ámsterdam', '12':'Museumkwartier, Ámsterdam',
+        '13':'Museumkwartier, Ámsterdam', '14':'Zaanse Schans',
+        '15':'Zaanse Schans',             '16':'Betuwe, Gelderland',
+        '17':'Rotterdam',                 '18':'Keukenhof, Lisse',
+        '19':'Keukenhof, Lisse',          '20':'Keukenhof, Lisse',
+        '21':'Keukenhof, Lisse',          '22':'Keukenhof, Lisse',
+        '23':'Keukenhof, Lisse',          '24':'Keukenhof, Lisse',
+        '25':'Keukenhof, Lisse',          '26':'Keukenhof, Lisse',
+        '27':'Keukenhof, Lisse',          '28':'Keukenhof, Lisse',
+        '29':'Keukenhof, Lisse',          '30':'Keukenhof, Lisse',
+        '31':'Keukenhof, Lisse',          '32':'Keukenhof, Lisse',
+        '33':'Keukenhof, Lisse',          '34':'Keukenhof, Lisse',
+        '35':'Keukenhof, Lisse',          '36':'Keukenhof, Lisse',
+        '37':'Keukenhof, Lisse',          '38':'Rotterdam',
+        '41':'Grote Markt, Antwerpen',    '42':'Grote Markt, Antwerpen',
+        '43':'Grote Markt, Antwerpen',    '44':'Grote Markt, Antwerpen',
+        '45':'Grote Markt, Antwerpen',    '46':'Grote Markt, Antwerpen',
+        '47':'Grote Markt, Antwerpen',    '48':'Grote Markt, Antwerpen',
+        '49':'Grote Markt, Antwerpen',    '50':'Grote Markt, Antwerpen',
+        '51':'Centraal Station, Antwerpen','52':'Centraal Station, Antwerpen',
+        '53':'Centraal Station, Antwerpen','54':'Centraal Station, Antwerpen',
+        '55':'Centraal Station, Antwerpen','57':'Antwerpen',
+        '58':'Grote Markt, Antwerpen',    '59':'Grote Markt, Antwerpen'
       }
     };
 

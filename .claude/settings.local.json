@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:cornellana.online)",
+      "Bash(mkdir -p \"/Users/Francisco_1/Pictures/Portfolio/alaska\" \\\\ *)",
+      "Bash(chmod +x \"/Users/Francisco_1/Downloads/Mi Pagina Web/descargar_fotos.sh\")",
+      "Bash(bash \"/Users/Francisco_1/Downloads/Mi Pagina Web/descargar_fotos.sh\")",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s -L https://cornellana.online/wp-content/uploads/2024/03/White-on-Transparent.png -o '/Users/Francisco_1/Downloads/Mi Pagina Web/logo.png')",
+      "Bash(chmod +x \"/Users/Francisco_1/Downloads/Mi Pagina Web/descargar_fotos2.sh\")",
+      "Bash(bash \"/Users/Francisco_1/Downloads/Mi Pagina Web/descargar_fotos2.sh\")",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(gh auth *)",
+      "Bash(gh api *)",
+      "Bash(git push *)",
+      "Bash(chmod +x \"/Users/Francisco_1/Downloads/Mi Pagina Web/rename_photos.sh\")",
+      "Bash(git pull *)"
+    ],
+    "additionalDirectories": [
+      "/Users/Francisco_1/Pictures/Portfolio"
+    ]
+  }
+}
