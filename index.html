@@ -263,17 +263,22 @@
       transform: translateX(-50%);
       z-index: 2;
       display: flex;
-      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+      max-width: min(85vw, 560px);
       align-items: center;
     }
     .hero-dot {
-      width: 24px;
-      height: 1px;
-      background: rgba(230,230,230,0.3);
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      background: rgba(230,230,230,0.32);
       cursor: pointer;
-      transition: background 0.3s, width 0.3s;
+      transition: background 0.3s, transform 0.3s;
     }
-    .hero-dot.active { background: var(--gold); width: 40px; }
+    .hero-dot.active { background: var(--gold); transform: scale(1.7); }
 
     .label {
       font-size: 0.68rem;
@@ -343,9 +348,9 @@
 
     .portfolio-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1px;
-      background: var(--border);
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 1.6rem;
+      background: var(--black);
     }
 
     .p-item {
@@ -372,33 +377,33 @@
     .p-item-info {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0);
+      background: linear-gradient(to top, rgba(0,0,0,0.80) 0%, rgba(0,0,0,0.32) 48%, rgba(0,0,0,0.02) 78%);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
       padding: 1.4rem;
       transition: background 0.3s;
     }
-    .p-item:hover .p-item-info { background: rgba(0,0,0,0.62); }
+    .p-item:hover .p-item-info { background: linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.05) 85%); }
 
     .p-item-cat {
       font-size: 0.62rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       color: var(--gold);
-      transform: translateY(8px);
-      opacity: 0;
-      transition: all 0.28s;
+      opacity: 1;
+      text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+      transition: transform 0.28s;
     }
     .p-item-name {
       font-family: 'Playfair Display', serif;
       font-size: 1.15rem;
-      transform: translateY(8px);
-      opacity: 0;
-      transition: all 0.28s 0.04s;
+      opacity: 1;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.75);
+      transition: transform 0.28s 0.04s;
     }
     .p-item:hover .p-item-cat,
-    .p-item:hover .p-item-name { transform: translateY(0); opacity: 1; }
+    .p-item:hover .p-item-name { transform: translateY(-3px); }
 
     /* ─── Calendar ───────────────────────────────────────────────── */
     #calendar { background: var(--black); }
@@ -689,19 +694,19 @@
       flex-shrink: 0;
     }
     .gal-close {
-      background: none;
-      border: 1px solid var(--border);
-      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(230,230,230,0.3);
+      color: var(--text);
       cursor: pointer;
-      width: 40px;
-      height: 40px;
+      width: 46px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.1rem;
-      transition: color 0.2s, border-color 0.2s;
+      font-size: 1.25rem;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
-    .gal-close:hover { color: var(--text); border-color: var(--text); }
+    .gal-close:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
 
     .gal-count {
       font-size: 0.6rem;
@@ -794,19 +799,19 @@
       position: absolute;
       top: 1.2rem;
       right: 1.5rem;
-      background: none;
-      border: 1px solid rgba(255,255,255,0.12);
-      color: rgba(255,255,255,0.5);
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.3);
+      color: #fff;
       cursor: pointer;
-      width: 40px;
-      height: 40px;
+      width: 46px;
+      height: 46px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1rem;
-      transition: color 0.2s, border-color 0.2s;
+      font-size: 1.2rem;
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
     }
-    .lb-close:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+    .lb-close:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
 
     .lb-counter {
       position: absolute;
@@ -871,7 +876,7 @@
     }
 
     @media (max-width: 520px) {
-      .portfolio-grid { grid-template-columns: 1fr 1fr; }
+      .portfolio-grid { grid-template-columns: 1fr 1fr; gap: 1px; background: var(--border); }
       .filter-bar { width: 100%; }
       .filter-btn { flex: 1; text-align: center; }
       .gal-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
@@ -1125,21 +1130,51 @@
   </div>
 
   <script>
-    const HERO_BASE = 'https://cornellana.online/wp-content/uploads/2024/03/';
+    const HERO_BASE  = 'https://cornellana.online/wp-content/uploads/2024/03/';
+    const LOCAL_BASE = 'Pictures/Portfolio/';
+    const isLocal    = true;
 
     /* ── Hero slideshow ─────────────────────────────────────────── */
+    /* One entry per gallery. Claude adds a line here every time you add a new
+       gallery — image is always the local 01.jpg of that gallery, no separate
+       upload needed. catKey must match an existing 'cat_<catKey>' translation. */
     const SLIDES = [
-      { img: '7R33327-scaled-1.jpg',                   name: 'Patagonia',    cat: 'South America',  gallery: 'patagonia'     },
-      { img: 'Best-Photo-ON1-_7R37167-1-scaled-1.jpg', name: 'Lofoten',      cat: 'Europe',         gallery: 'lofoten'       },
-      { img: 'DSC02859-scaled-1.jpg',                  name: 'Alaska',       cat: 'North America',  gallery: 'alaska'        },
-      { img: 'A1_07241-scaled-1.jpg',                  name: 'Kenya',        cat: 'Africa',         gallery: 'kenia'         },
-      { img: '7R37899-scaled.jpg',                     name: 'Japan',        cat: 'Asia',           gallery: 'japon'         },
-      { img: '7R38614-scaled-1.jpg',                   name: 'Yellowstone',  cat: 'North America',  gallery: 'yellowstone'   },
-      { img: '7R30449-scaled-1.jpg',                   name: 'Grand Canyon', cat: 'North America',  gallery: 'grand-canyon'  },
-      { img: 'DSC09082-scaled-1.jpg',                  name: 'Hawaii',       cat: 'North America',  gallery: 'hawaii'        },
-      { img: 'Dolomites-ON1-_7R41118-scaled-1.jpg',    name: 'Dolomites',    cat: 'Europe',         gallery: 'dolomitas'     },
-      { img: '7R36359-scaled-1.jpg',                   name: 'Yosemite',     cat: 'North America',  gallery: 'yosemite'      },
+      { gallery: 'alaska',               name: 'Alaska',                 catKey: 'north_america' },
+      { gallery: 'hawaii',               name: 'Hawaii',                 catKey: 'north_america' },
+      { gallery: 'yellowstone',          name: 'Yellowstone',            catKey: 'north_america' },
+      { gallery: 'yosemite',             name: 'Yosemite',               catKey: 'north_america' },
+      { gallery: 'grand-canyon',         name: 'Grand Canyon',           catKey: 'north_america' },
+      { gallery: 'arches',               name: 'Arches',                 catKey: 'north_america' },
+      { gallery: 'bryce-canyon',         name: 'Bryce Canyon',           catKey: 'north_america' },
+      { gallery: 'monumental-valley',    name: 'Monument Valley & Zion', catKey: 'north_america' },
+      { gallery: 'lake-powell',          name: 'Lake Powell',            catKey: 'north_america' },
+      { gallery: 'southwest-parks',      name: 'Southwest Parks',        catKey: 'north_america' },
+      { gallery: 'patagonia',            name: 'Patagonia',              catKey: 'south_america' },
+      { gallery: 'lofoten',              name: 'Lofoten',                catKey: 'europe' },
+      { gallery: 'dolomitas',            name: 'Dolomites',              catKey: 'europe' },
+      { gallery: 'roma-napoles',         name: 'Rome & Naples',          catKey: 'europe' },
+      { gallery: 'sagrada-familia',      name: 'Sagrada Família',        catKey: 'europe' },
+      { gallery: 'andorra',              name: 'Andorra',                catKey: 'europe' },
+      { gallery: 'islandia',             name: 'Iceland',                catKey: 'europe' },
+      { gallery: 'islas-feroes',         name: 'Faroe Islands',          catKey: 'europe' },
+      { gallery: 'crucero-paises-bajos', name: 'Crucero Países Bajos',   catKey: 'europe' },
+      { gallery: 'japon',                name: 'Japan',                  catKey: 'asia' },
+      { gallery: 'kenia',                name: 'Kenya',                  catKey: 'africa' },
+      { gallery: 'marruecos',            name: 'Morocco',                catKey: 'africa' },
+      { gallery: 'macro',                name: 'Macro',                  catKey: 'specialty' },
+      { gallery: 'drones',               name: 'Drones',                 catKey: 'specialty' },
+      { gallery: 'aves',                 name: 'Birds',                  catKey: 'wildlife' },
+      { gallery: 'flores',               name: 'Flowers',                catKey: 'nature' },
+      { gallery: 'mamiferos',            name: 'Mammals',                catKey: 'wildlife' },
+      { gallery: 'wings-over-wayne',     name: 'Wings over Wayne',       catKey: 'airshow' },
+      { gallery: 'slow-motion',          name: 'Slow Motion',            catKey: 'specialty' },
+      { gallery: 'danza',                name: 'Dance',                  catKey: 'events' },
+      { gallery: 'rodeo',                name: 'Rodeo',                  catKey: 'events' },
     ];
+
+    function heroSrc(slide) {
+      return isLocal ? (LOCAL_BASE + slide.gallery + '/01.jpg') : (HERO_BASE + (slide.img || ''));
+    }
 
     const slideA  = document.getElementById('slideA');
     const slideB  = document.getElementById('slideB');
@@ -1165,11 +1200,7 @@
     function showLocation(slide) {
       locEl.classList.remove('visible');
       setTimeout(() => {
-        const catKeyMap = {
-          'North America':'cat_north_america','South America':'cat_south_america',
-          'Europe':'cat_europe','Asia':'cat_asia','Africa':'cat_africa',
-        };
-        locCat.textContent  = TRANSLATIONS[currentLang][catKeyMap[slide.cat]] || slide.cat;
+        locCat.textContent  = TRANSLATIONS[currentLang]['cat_' + slide.catKey] || slide.catKey;
         locName.textContent = slide.name;
         locEl.classList.add('visible');
       }, 200);
@@ -1178,7 +1209,7 @@
     function goTo(idx) {
       if (idx === current) return;
       current = idx;
-      back.style.backgroundImage = `url('${HERO_BASE}${SLIDES[idx].img}')`;
+      back.style.backgroundImage = `url('${heroSrc(SLIDES[idx])}')`;
       back.style.opacity  = '1';
       front.style.opacity = '0';
       getDots().forEach((d, i) => d.classList.toggle('active', i === idx));
@@ -1186,7 +1217,7 @@
       [front, back] = [back, front];
     }
 
-    front.style.backgroundImage = `url('${HERO_BASE}${SLIDES[0].img}')`;
+    front.style.backgroundImage = `url('${heroSrc(SLIDES[0])}')`;
     front.style.opacity = '1';
     back.style.opacity  = '0';
     showLocation(SLIDES[0]);
@@ -1231,8 +1262,7 @@
     document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
     /* ── Gallery data ──────────────────────────────────────────── */
-    const LOCAL_BASE = 'Pictures/Portfolio/';
-    const isLocal = true;
+    /* LOCAL_BASE / isLocal already declared above, next to the hero carousel */
 
     /* Remote image URLs — used on GitHub Pages / iPhone / any non-file:// context */
     const GALLERY_IMAGES = {
@@ -1529,7 +1559,7 @@
           ca:'Kenya és la capital mundial de la fotografia de fauna salvatge. El Masai Mara, amb les seves planes infinites de sabana i l\'espectacle anual de la Gran Migració de wildebeests i zebres, és el lloc on els fotògrafs de natura van a aprendre i a perfeccionar-se. La diversitat faunística és aclaparadora: lleons, elefants, lleopards, guepards, rinoceronts i centenars d\'espècies d\'aus en un entorn accessible. La llum de les planes africanes al crepuscle —roig, daurat i profund— converteix fins i tot la imatge més senzilla en una obra mestra del color.',
           es:'Kenia es la capital mundial de la fotografía de fauna salvaje. El Masai Mara, con sus llanuras infinitas de sabana y el espectáculo anual de la Gran Migración de ñus y cebras, es el lugar donde los fotógrafos de naturaleza van a aprender y a perfeccionarse. La diversidad faunística es abrumadora: leones, elefantes, leopardos, guepardos, rinocerontes y cientos de especies de aves en un entorno accesible. La luz de las llanuras africanas al crepúsculo —rojo, dorado y profundo— convierte hasta la imagen más sencilla en una obra maestra del color.'
         }},
-      'marruecos': { name:'Morocco', cat:'Africa', catKey:'africa', count:20, link:'https://en.wikipedia.org/wiki/Morocco',
+      'marruecos': { name:'Morocco', cat:'Africa', catKey:'africa', count:125, link:'https://en.wikipedia.org/wiki/Morocco',
         desc:{
           en:'Morocco is a photographer\'s fever dream — a country where ancient Islamic architecture, Saharan landscapes and vibrant street culture converge in a riot of color, texture and light. The medinas of Fes and Marrakech are labyrinths of ochre walls, carved plasterwork and tiled fountains that have changed little in five centuries. The Erg Chebbi dunes near Merzouga rise to 150 meters and turn blood-red at sunset. The Atlas Mountains, snow-capped from autumn to spring, provide a dramatic backdrop to Berber villages clinging to their slopes. Light is Morocco\'s defining element — warm, golden and perpetually flattering.',
           ca:'El Marroc és el país de la frontera visual entre dos mons: l\'Africa del Sàhara i l\'Europa del Mediterrani. Les medines de Marràqueix i Fes, amb els seus zocs laberíntics, les portes de zèllij i el rebombori del batàn de pells, són un estímul sensorial i fotogràfic aclaparador. El desert del Sàhara, les dunes de Merzouga i les gorges del Draâ afegeixen un contrapunt de silenci i immensitat al tumulte de les ciutats. La llum del nord d\'Àfrica, blanca i contundent al migdia, s\'ablaneix en una llum daurada inoblidable al crepuscle.',
@@ -1845,6 +1875,71 @@
         '247':'Amboseli', '248':'Amboseli',
         '249':'Amboseli', '250':'Amboseli',
         '251':'Amboseli', '252':'Amboseli'
+      },
+      'marruecos': {
+        '01':"Tizi n'Tichka Pass", '02':"Tizi n'Tichka Pass",
+        '03':"Tizi n'Tichka Pass", '04':"Tizi n'Tichka Pass",
+        '05':"Tizi n'Tichka Pass", '06':"Tizi n'Tichka Pass",
+        '07':"Tizi n'Tichka Pass", '08':"Tizi n'Tichka Pass",
+        '09':"Tizi n'Tichka Pass", '10':"Tizi n'Tichka Pass",
+        '11':"Tizi n'Tichka Pass", '12':"Tizi n'Tichka Pass",
+        '13':"Tizi n'Tichka Pass", '14':"Tizi n'Tichka Pass",
+        '15':"Tizi n'Tichka Pass", '16':"Tizi n'Tichka Pass",
+        '17':"Tizi n'Tichka Pass", '18':"Tizi n'Tichka Pass",
+        '19':"Tizi n'Tichka Pass", '20':"Tizi n'Tichka Pass",
+        '21':"Tizi n'Tichka Pass", '22':"Tizi n'Tichka Pass",
+        '23':"Tizi n'Tichka Pass", '24':"Aït Benhaddou",
+        '25':"Aït Benhaddou", '26':"Aït Benhaddou",
+        '27':"Aït Benhaddou", '28':"Aït Benhaddou",
+        '29':"Aït Benhaddou", '30':"Aït Benhaddou",
+        '31':"Aït Benhaddou", '32':"Aït Benhaddou",
+        '33':"Aït Benhaddou", '34':"Aït Benhaddou",
+        '35':"Aït Benhaddou", '36':"Aït Benhaddou",
+        '37':"Aït Benhaddou", '38':"Aït Benhaddou",
+        '39':"Aït Benhaddou", '40':"Aït Benhaddou",
+        '41':"Dades Valley", '42':"Dades Valley",
+        '43':"Dades Valley", '44':"Dades Valley",
+        '45':"Todra Gorge", '46':"Todra Gorge",
+        '47':"Merzouga / Erg Chebbi", '48':"Merzouga / Erg Chebbi",
+        '49':"Merzouga / Erg Chebbi", '50':"Merzouga / Erg Chebbi",
+        '51':"Merzouga / Erg Chebbi", '52':"Merzouga / Erg Chebbi",
+        '53':"Merzouga / Erg Chebbi", '54':"Merzouga / Erg Chebbi",
+        '55':"Merzouga / Erg Chebbi", '56':"Merzouga / Erg Chebbi",
+        '57':"Merzouga / Erg Chebbi", '58':"Merzouga / Erg Chebbi",
+        '59':"Merzouga / Erg Chebbi", '60':"Merzouga / Erg Chebbi",
+        '61':"Merzouga / Erg Chebbi", '62':"Merzouga / Erg Chebbi",
+        '63':"Merzouga / Erg Chebbi", '64':"Merzouga / Erg Chebbi",
+        '65':"Merzouga / Erg Chebbi", '66':"Merzouga / Erg Chebbi",
+        '67':"Merzouga / Erg Chebbi", '68':"Merzouga / Erg Chebbi",
+        '69':"Merzouga / Erg Chebbi", '70':"Merzouga / Erg Chebbi",
+        '71':"Rissani", '72':"Rissani",
+        '73':"Rissani", '74':"Rissani",
+        '75':"Rissani", '76':"Rissani",
+        '77':"Rissani", '78':"Rissani",
+        '79':"Rissani", '80':"Rissani",
+        '81':"Rissani", '82':"Rissani",
+        '83':"Rissani", '84':"Rissani",
+        '85':"Rissani", '86':"Rissani",
+        '87':"Rissani", '88':"Agdz, Draa Valley",
+        '89':"Agdz, Draa Valley", '90':"Agdz, Draa Valley",
+        '91':"Agdz, Draa Valley", '92':"Ouarzazate",
+        '93':"Ouarzazate", '94':"Tizi n'Tichka Pass",
+        '95':"Tizi n'Tichka Pass", '96':"Marrakech",
+        '97':"Marrakech", '98':"Marrakech",
+        '99':"Marrakech", '100':"Marrakech",
+        '101':"Marrakech", '102':"Marrakech",
+        '103':"Marrakech", '104':"Marrakech",
+        '105':"Marrakech", '106':"Marrakech",
+        '107':"Marrakech", '108':"Marrakech",
+        '109':"Marrakech", '110':"Marrakech",
+        '111':"Marrakech", '112':"Marrakech",
+        '113':"Marrakech", '114':"Marrakech",
+        '115':"Marrakech", '116':"Marrakech",
+        '117':"Marrakech", '118':"Marrakech",
+        '119':"Marrakech", '120':"Marrakech",
+        '121':"Marrakech", '122':"Marrakech",
+        '123':"Marrakech", '124':"Marrakech",
+        '125':"Marrakech"
       }
     };
 
